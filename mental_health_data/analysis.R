@@ -1,8 +1,3 @@
-devtools::install_github(
-    "giuseppealfonzetti/stIsing@18cda99",
-    ref="main",
-    force = F
-)
 library(tidyverse)
 library(ggplot2)
 library(stIsing)

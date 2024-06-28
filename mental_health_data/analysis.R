@@ -122,7 +122,6 @@ gg_hnll <- path_hnll %>%
     geom_rect(aes(xmin=-Inf,xmax=cpp_ctrl_init$BURN/n, ymin=-Inf,ymax=Inf),
               fill="lightgrey", color =NA) +
     geom_line() +
-    #geom_vline(xintercept = opt_iter/n, linetype = 'dashed') +
     labs(x = 'Number of passes through the training partition', y = 'Holdout negative composite log-likelihood') +
     theme_bw()
 gg_hnll
@@ -131,7 +130,6 @@ traj <- path_theta %>%
     mutate(path_av_theta = map(path_av_theta, ~ tibble(par = (1:length(.x)), val = .x))) %>%
     unnest('path_av_theta') %>%
     mutate(lab = if_else(par > p, 'Edge coefficients', 'Intercepts'), pass = iter/n)
-#traj %>% pluck('pass') %>% unique()
 
 gg_traj <- traj %>%
     ggplot(aes(x = pass, y = val, group = par)) +
@@ -148,7 +146,7 @@ gg_checks <- ggpubr::ggarrange(gg_traj + labs(x = ' '),
                                nrow = 1, widths = c(2,1) )
 gg_checks <- ggpubr::annotate_figure(gg_checks, bottom = 'Number of passes through the training partition')
 gg_checks
-#ggsave(gg_checks, filename = 'gg_checks.pdf', width = 10, height = 4)
+ggsave(gg_checks, filename = 'gg_checks.pdf', width = 10, height = 4)
 
 #### inference ####
 system.time(
@@ -213,7 +211,7 @@ gg_chosen <- holm_tidy_net  %>%
           plot.subtitle=element_text(hjust=0.5, vjust = -.3)) +
     scale_color_manual(values = colz)
 
-#ggsave(gg_chosen, filename = 'mental_health_struct.pdf', width = 10, height = 6)
+ggsave(gg_chosen, filename = 'mental_health_struct.pdf', width = 10, height = 6)
 
 grf <- girafe(ggobj = gg_chosen, width_svg = 10, height_svg = 10,
               options = list(opts_sizing(rescale = F)))
@@ -246,4 +244,4 @@ gg2 <- tibble(
   labs( x = 'Stochastic estimates on original data', y = 'Stochastic estimates on simulated data')
 
 gg_estimation_checks <- ggpubr::ggarrange(gg1, gg2)
-#ggsave(gg_estimation_checks, filename = 'gg_estimation_checks.pdf', width = 10, height = 6)
+ggsave(gg_estimation_checks, filename = 'gg_estimation_checks.pdf', width = 10, height = 6)

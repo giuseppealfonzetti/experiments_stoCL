@@ -211,12 +211,12 @@ gg_chosen <- holm_tidy_net  %>%
           plot.subtitle=element_text(hjust=0.5, vjust = -.3)) +
     scale_color_manual(values = colz)
 
-ggsave(gg_chosen, filename = 'mental_health_struct.pdf', width = 10, height = 6)
+ggsave(gg_chosen, filename = 'mental_health_data/mental_health_struct.pdf', width = 10, height = 6)
 
 grf <- girafe(ggobj = gg_chosen, width_svg = 10, height_svg = 10,
               options = list(opts_sizing(rescale = F)))
 grf
-#htmlwidgets::saveWidget(grf, "mental_health_struct.html", selfcontained = T)
+#htmlwidgets::saveWidget(grf, "mental_health_data/mental_health_struct.html", selfcontained = T)
 
 # Estimation check
 gg1 <- tibble(
@@ -244,4 +244,4 @@ gg2 <- tibble(
   labs( x = 'Stochastic estimates on original data', y = 'Stochastic estimates on simulated data')
 
 gg_estimation_checks <- ggpubr::ggarrange(gg1, gg2)
-ggsave(gg_estimation_checks, filename = 'gg_estimation_checks.pdf', width = 10, height = 6)
+ggsave(gg_estimation_checks, filename = 'mental_health_data/gg_estimation_checks.pdf', width = 10, height = 6)

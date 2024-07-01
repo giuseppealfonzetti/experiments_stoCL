@@ -17,9 +17,9 @@ colzA <- scales::viridis_pal(option = 'G')(8)
 colzB <- scales::viridis_pal(option = 'B')(8)
 colzC <- scales::viridis_pal(option = 'A')(8)
 
-barplot(rep(1, length(colzA)), col = colzA)
-barplot(rep(1, length(colzB)), col = colzB)
-barplot(rep(1, length(colzC)), col = colzC)
+# barplot(rep(1, length(colzA)), col = colzA)
+# barplot(rep(1, length(colzB)), col = colzB)
+# barplot(rep(1, length(colzC)), col = colzC)
 colz <- c(colzA[c(3, 4, 6)], colzB[c(6, 4, 7)])
 numcol <- '#0B0405FF'
 

@@ -122,12 +122,11 @@ est_obj_list <- pbapply::pblapply(
     
     
     suppressMessages(
-      mod_obj <- fit_isingGraph2(
+      mod_obj <- fit_isingGraph3(
         DATA_LIST = list(DATA = as.matrix(data), CONSTRAINTS = Q),
         METHOD = 'ucminf',
         CPP_CONTROL = list(),
         INIT = par_init,
-        ITERATIONS_SUBSET = NULL,
         VERBOSEFLAG = 0
       )
     )
@@ -224,12 +223,11 @@ est_obj_list <- pbapply::pblapply(
     
     set.seed(x$stoc_seed)
     suppressMessages(
-      mod_obj <- fit_isingGraph2(
+      mod_obj <- fit_isingGraph3(
         DATA_LIST = list(DATA = as.matrix(data), CONSTRAINTS = Q),
         METHOD = 'bernoulli',
         CPP_CONTROL = cpp_ctrl,
         INIT = par_init,
-        ITERATIONS_SUBSET = subtraj,
         VERBOSEFLAG = 0
       )
     )
@@ -274,12 +272,11 @@ est_obj_list <- pbapply::pblapply(
     
     set.seed(x$stoc_seed)
     suppressMessages(
-      mod_obj <- fit_isingGraph2(
+      mod_obj <- fit_isingGraph3(
         DATA_LIST = list(DATA = as.matrix(data), CONSTRAINTS = Q),
         METHOD = 'hyper',
         CPP_CONTROL = cpp_ctrl,
         INIT = par_init,
-        ITERATIONS_SUBSET = subtraj,
         VERBOSEFLAG = 0
       )
     )
@@ -430,15 +427,16 @@ recycle_hyper_est <- sim_settings %>%
   mutate(mod = est_obj_list)
 
 stoc_est <- recycle_standard_est %>%
-  # bind_rows(bernoulli_est) %>%
-  # bind_rows(hyper_est) %>%
+  bind_rows(bernoulli_est) %>%
+  bind_rows(hyper_est) %>%
   bind_rows(standard_est) %>%
   bind_rows(recycle_hyper_est)
 
 path_tab <- stoc_est %>%
-  mutate(path_theta = map(mod, ~get_tidy_path3(.x, 'path_av_theta'))) %>%
+  mutate(path_theta = map(mod, ~try(get_tidy_path3(.x, 'path_av_theta')))) %>%
   select(-mod)
 
+path_tab |> filter(row_number()==46)
 save(num_est, stoc_est, path_tab, true_tib, file = paste0('isi/data_files/', settingLab, '/est.Rda'))
 ######## variance ####
 

@@ -34,10 +34,10 @@ name_par <- function(par){
     else{'intercepts'}
 }
 
-
+path_tab %>% pluck('path_theta', 46)
 # stochastic parameters trajectories: mse
 par_path <- path_tab %>%
-    unnest(path_theta) %>%
+    unnest('path_theta') %>%
     mutate(intercepts = map_dbl(path_av_theta, ~mean((.x[1:p]-true_theta[1:p])^2)),
            edges = map_dbl(path_av_theta, ~mean((.x[(p+1):d]-true_theta[(p+1):d])^2)),
            all = map_dbl(path_av_theta, ~mean((.x-true_theta)^2))) %>%
@@ -381,7 +381,7 @@ cov_lines <- sample_st_coverage %>%
     scale_color_manual(values = colz) +
     theme(legend.position = 'bottom')
 cov_lines
-plotly::ggplotly(cov_lines)
+
 saveRDS(cov_lines, file = paste0(plots_path,'gg/cov_lines.rds'))
 ggsave(plot = cov_lines, filename = paste0(plots_path, 'cov_lines.pdf'), width = 8, height = 4)
 

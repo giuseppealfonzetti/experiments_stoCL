@@ -20,7 +20,9 @@ if(!dir.exists('isi/plots')) {dir.create('isi/plots'); cat('[Create plots folder
 
 ## Specify setting label:
 
-# Run  with lab 'I' for the setting with p=10 and with lab 'II' for the setting with p=20
+# Run  with settingLab <- 'I' and p <- 10 for the smaller setting 
+# Run  with settingLab <- 'II' and p <- 20 for the larger setting 
+
 settingLab <- 'I'
 if(!dir.exists(paste0('isi/data_files/', settingLab))){dir.create(paste0('isi/data_files/', settingLab)); cat('[Create setting-related data folder]')}
 

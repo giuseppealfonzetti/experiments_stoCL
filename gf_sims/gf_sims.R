@@ -15,7 +15,9 @@ if(!dir.exists('gf/data_files')) {dir.create('gf/data_files'); cat('[Create data
 # Folder to store plots
 if(!dir.exists('gf/plots')) {dir.create('gf/plots'); cat('[Create plots folder]') }
 
-# Run  with lab 'I' for the setting with p=20 and with lab 'II' for the setting with p=30
+# Run  with settingLab <- 'I' and p <- 20 for the smaller setting 
+# Run  with settingLab <- 'II' and p <- 30 for the larger setting 
+
 settingLab <- 'I'
 if(!dir.exists(paste0('gf/data_files/', settingLab))){dir.create(paste0('gf/data_files/', settingLab)); cat('[Create setting-related data folder]')}
 

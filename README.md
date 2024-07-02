@@ -2,7 +2,7 @@
 
 This repo stores the code to reproduce the results described in the paper "When composite likelihood meets stochastic approximation".
 
-The code relies on two custom packages, stored as `.tar.gz` files in the `helper_packages/` folder.
+The code relies on two custom packages, whose source code is stored in the `helper_packages/` folder.
 The code for the synthetic experiments is stored in the folders `isi_sims/` and `gf_sims/`, while the real data analysis can be found in the `mental_health_data/` folder.
 
 The code for the synthetic experiments is divided in three `R` scripts, called `*_sims.R` , `raw_output.R` and `paper_plots.R` .

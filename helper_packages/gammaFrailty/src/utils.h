@@ -57,7 +57,6 @@ Rcpp::NumericMatrix rmultinom_wrapper(const double prob, const unsigned int clas
      return(pool);
 }
 
-//'@export
 // [[Rcpp::export]]
  std::vector<int> components_given_unit(const unsigned int UNIT, const unsigned int K){
      std::vector<int> pool(K);

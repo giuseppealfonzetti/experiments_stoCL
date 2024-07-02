@@ -10,3 +10,7 @@ NULL
 #' @import RcppEigen
 ## usethis namespace: end
 NULL
+## usethis namespace: start
+#' @importFrom stats rbinom rnorm rpois
+## usethis namespace: end
+NULL

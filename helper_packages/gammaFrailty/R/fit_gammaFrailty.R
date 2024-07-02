@@ -1,3 +1,37 @@
+utils::globalVariables(c("clock"))
+#' Gamma frailty estimation
+#'
+#' @param DATA_LIST List containing:
+#' \itemize{
+#'  \item{`DATA`}{Data matrix with `n` rows and `p` columns}
+#'  \item{`X`}{External covariates matrix with `n` rows}
+#' }
+#' @param METHOD Allowed choices are "ucminf", "standard", "bernoulli", "hyper",
+#' "recycle_standard", "recycle_bernoulli", "recycle_hyper" and "randomized".
+#' @param CPP_CONTROL List of arguments to be passed to the stochastic optimizer:
+#' \itemize{
+#'  \item{`MAXT`}{Number of iterations.}
+#'  \item{`BURN`}{Scalar between 0 and 1 denoting the share of `n` to be used as burn-in iterations.}
+#'  \item{`STEPSIZE`}{Initial stepsize parameter.}
+#'  \item{`NU`}{Nomber of pairs per iteration on average.}
+#'  \item{`PAR1`}{Hyperparameter for stepsize scheduling by Xu (2011): Scaling.}
+#'  \item{`PAR2`}{Hyperparameter for stepsize scheduling by Xu (2011): Smallest Hessian eigenvalue.}
+#'  \item{`PAR3`}{Hyperparameter for stepsize scheduling by Xu (2011): Decay rate}
+#'  \item{`STEPSIZEFLAG`}{Choose stepsize scheduling: Set 0 for Polyak and Juditsky (1992), 1 for Xu (2011).}
+#'  \item{`SAMPLING_WINDOW`}{How many iterations to wait before resampling}
+#'  \item{`EACHCLOCK`}{How often (in terms of iterations) to measure single iteration computational times (using \code{RcppClock})}
+#'  \item{`SEED`}{Random seed for reproducibility.}
+#' }
+#' @param UCMINF_CONTROL List of arguments to be passed to \link[ucminf]{ucminf}:
+#' \itemize{
+#'  \item{"ctrl"}{Passed to `ctrl` argument in \link[ucminf]{ucminf}}
+#'  \item{"hessian"}{Passed to `hessian` argument in \link[ucminf]{ucminf}}
+#' }
+#' @param PAIRS_RANGE Maximum lag between pair components.
+#' @param STRUCT Structure of the correlation matrix. Allowed values are "AR" or "COMPOUND".
+#' @param INIT Initialization vector.
+#' @param ITERATIONS_SUBSET Vector containing the indexes of the iterations to be returned to the R session.
+#' @param VERBOSEFLAG Verbose output.
 #'@export
 fit_gammaFrailty2 <- function(
         DATA_LIST = list('DATA', 'X'),
@@ -12,7 +46,7 @@ fit_gammaFrailty2 <- function(
             PAIRS_RANGE = 5
         ),
         UCMINF_CONTROL = list('ctrl' = list(), 'hessian' = 0),
-        PAIRS_RANGE = 3,
+        PAIRS_RANGE,
         STRUCT,
         INIT = NULL,
         ITERATIONS_SUBSET = NULL,
@@ -162,48 +196,5 @@ fit_gammaFrailty2 <- function(
 
     }
 
-    # Gradient descent
-    if(METHOD == 'GD'){
-
-        message(paste0('2. Optimising with ', METHOD, '...'))
-
-        cpp_ctrl <- check_GD_args(CPP_CONTROL, N = n)
-
-        # Check iterations selected
-        if(!is.null(ITERATIONS_SUBSET)){
-            out$iterations_subset <- c(0, ITERATIONS_SUBSET[ITERATIONS_SUBSET < cpp_ctrl$MAXT], cpp_ctrl$MAXT)
-        }else{
-            out$iterations_subset <- 0:cpp_ctrl$MAXT
-        }
-
-        # Collect and rearrange arguments to pass to cpp function
-        args <- list(
-            'MAXT' = cpp_ctrl$MAXT,
-            'METHODFLAG' = 0,
-            'BURN' = 0,
-            'STEPSIZE'= cpp_ctrl$STEPSIZE,
-            'STEPSIZE0' = cpp_ctrl$STEPSIZE,
-            'STEPSIZEFLAG' = F,
-            'NU' = 1,
-            'VERBOSEFLAG' = VERBOSEFLAG
-        )
-        args <- append(args, append(list( 'THETA_INIT' = out$theta_init), DATA_LIST))
-
-        fit <- do.call(gammaFrailty, args)
-        fit$path_theta    <- fit$path_theta[out$iterations_subset + 1,   ]
-        fit$path_grad     <- fit$path_grad[out$iterations_subset,  ]
-        fit$path_av_theta <- NULL
-        fit$methodflag <- NULL
-
-
-        out$control <- cpp_ctrl
-        out$fit <- fit
-        out$theta <- fit$path_theta[nrow(fit$path_theta),]
-        end_time <- Sys.time()
-        out$time <- as.numeric(difftime(end_time, start_time, units = 'secs')[1])
-        message('\n3. Done! (', round(out$time,2),' secs)')
-        return(out)
-
-    }
 }
 

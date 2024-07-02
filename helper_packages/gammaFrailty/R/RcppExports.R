@@ -5,22 +5,14 @@ pair_wrapper <- function(j, jp, n_j, n_jp, p, alpha_j, alpha_jp, x, beta, lxi, a
     .Call(`_gammaFrailty_pair_wrapper`, j, jp, n_j, n_jp, p, alpha_j, alpha_jp, x, beta, lxi, artanhrho, ind, verboseS, verboseSind, STRUCT)
 }
 
-#' @export
 ncl <- function(theta, data, X, printFLAG = FALSE, PAIRS_RANGE = 100L, STRUCT = 0L) {
     .Call(`_gammaFrailty_ncl`, theta, data, X, printFLAG, PAIRS_RANGE, STRUCT)
 }
 
-#' @export
 randomized_ncl <- function(theta, data, X, printFLAG = FALSE, PROB = 1, PAIRS_RANGE = 100L, STRUCT = 0L) {
     .Call(`_gammaFrailty_randomized_ncl`, theta, data, X, printFLAG, PROB, PAIRS_RANGE, STRUCT)
 }
 
-#' @export
-gammaFrailty <- function(THETA_INIT, DATA, X, STRUCT, MAXT, BURN, STEPSIZE, SCALEVEC, NU, METHODFLAG = 0L, VERBOSEFLAG = FALSE, par1 = 1, par2 = 1, par3 = .75, PAIRS_RANGE = 100L, STEPSIZEFLAG = 1L) {
-    .Call(`_gammaFrailty_gammaFrailty`, THETA_INIT, DATA, X, STRUCT, MAXT, BURN, STEPSIZE, SCALEVEC, NU, METHODFLAG, VERBOSEFLAG, par1, par2, par3, PAIRS_RANGE, STEPSIZEFLAG)
-}
-
-#' @export
 gammaFrailty2 <- function(THETA_INIT, DATA, X, STRUCT, MAXT, BURN, STEPSIZE, SCALEVEC, NU, METHODFLAG = 0L, VERBOSEFLAG = FALSE, PAR1 = 1, PAR2 = 1, PAR3 = .75, STEPSIZEFLAG = 0L, SEED = 123L, SAMPLING_WINDOW = 1L, EACHCLOCK = 500L) {
     .Call(`_gammaFrailty_gammaFrailty2`, THETA_INIT, DATA, X, STRUCT, MAXT, BURN, STEPSIZE, SCALEVEC, NU, METHODFLAG, VERBOSEFLAG, PAR1, PAR2, PAR3, STEPSIZEFLAG, SEED, SAMPLING_WINDOW, EACHCLOCK)
 }
@@ -49,7 +41,6 @@ unit_sampling <- function(N, SEED) {
     .Call(`_gammaFrailty_unit_sampling`, N, SEED)
 }
 
-#'@export
 components_given_unit <- function(UNIT, K) {
     .Call(`_gammaFrailty_components_given_unit`, UNIT, K)
 }
@@ -62,16 +53,28 @@ index_to_component <- function(P, N, INDEX) {
     .Call(`_gammaFrailty_index_to_component`, P, N, INDEX)
 }
 
-#' @export
 sampleJ <- function(THETA, DATA, X, STRUCT, PRINTFLAG = FALSE, PAIRS_RANGE = 100L) {
     .Call(`_gammaFrailty_sampleJ`, THETA, DATA, X, STRUCT, PRINTFLAG, PAIRS_RANGE)
 }
 
-#' @export
 sampleH <- function(THETA, DATA, X, STRUCT, PRINTFLAG = FALSE, INVERTFLAG = FALSE, PAIRS_RANGE = 100L) {
     .Call(`_gammaFrailty_sampleH`, THETA, DATA, X, STRUCT, PRINTFLAG, INVERTFLAG, PAIRS_RANGE)
 }
 
+#' Compute sample covariance matrix
+#'
+#' @param THETA Parameter vector
+#' @param DATA matrix with `n` rows and `p` columns
+#' @param X External covariates matrix with `n` rows
+#' @param STRUCT Structure of the correlation matrix. Allowed values are "AR" or "COMPOUND".
+#' @param NU Nomber of pairs per iteration on average
+#' @param METHOD Allowed choices are "ucminf", "standard", "bernoulli", "hyper",
+#' "recycle_standard", "recycle_bernoulli", "recycle_hyper"
+#' @param RANGE Number of iterations after the burn-in.
+#' @param TOTFLAG Compute total variance
+#' @param PRINTFLAG Verbose output
+#' @param PAIRS_RANGE Maximum lag between pair components
+#'
 #' @export
 sampleVar <- function(THETA, DATA, X, STRUCT, NU, METHOD, RANGE, TOTFLAG, PRINTFLAG, PAIRS_RANGE = 100L) {
     .Call(`_gammaFrailty_sampleVar`, THETA, DATA, X, STRUCT, NU, METHOD, RANGE, TOTFLAG, PRINTFLAG, PAIRS_RANGE)

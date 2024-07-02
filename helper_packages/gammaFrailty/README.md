@@ -87,6 +87,7 @@ fit <- fit_gammaFrailty2(
     DATA_LIST = list('DATA' = data, 'X' = X),
     METHOD = 'ucminf',
     CPP_CONTROL = list(),
+    PAIRS_RANGE = p,
     VERBOSEFLAG= 0,
     INIT = par_init,
     ITERATIONS_SUBSET = NULL,
@@ -94,10 +95,10 @@ fit <- fit_gammaFrailty2(
 )
 #> 1. Initialising at init vector.
 #> 2. Optimising with ucminf...
-#> 3. Done! (4.6 secs)
+#> 3. Done! (12.27 secs)
 
 mean((repartopar(fit$theta)-theta)^2)
-#> [1] 0.0003183388
+#> [1] 0.000307326
 mean((repartopar(par_init)-theta)^2)
 #> [1] 0.3631014
 ```
@@ -133,7 +134,7 @@ stFit <- fit_gammaFrailty2(
 #> 1. Initialising at init vector.
 #> 2. Optimising with recycle_hyper...
 #> 
-#> 3. Done! (0.18 secs)
+#> 3. Done! (0.17 secs)
 mean((repartopar(stFit$theta)-theta)^2)
 #> [1] 0.0003661119
 ```

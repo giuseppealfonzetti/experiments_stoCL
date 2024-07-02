@@ -119,6 +119,7 @@ est_obj_list <- pbapply::pblapply(
                 DATA_LIST = list('DATA' = data, 'X' = X),
                 METHOD = 'ucminf',
                 CPP_CONTROL = list(),
+                PAIRS_RANGE = range_lag,
                 VERBOSEFLAG= 0,
                 INIT = par_init,
                 ITERATIONS_SUBSET = NULL,

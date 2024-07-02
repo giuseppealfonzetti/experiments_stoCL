@@ -1,5 +1,3 @@
-#### functions #####
-#'@export
 generate_C <- function(RHO, P, STRUCT){
     if(STRUCT=='AR'){
         out <- diag(rep(1,P))
@@ -16,7 +14,6 @@ generate_C <- function(RHO, P, STRUCT){
     return(out)
 }
 
-#'@export
 generate_mgamma <- function(Q, C, SEED){
     set.seed(SEED)
     out <- colMeans((mvtnorm::rmvnorm(n = Q, sigma = C))^2)
@@ -24,6 +21,16 @@ generate_mgamma <- function(Q, C, SEED){
     return(out)
 }
 
+#' Simulate a synthetic dataset
+#'
+#' @param INTERCEPT Intercept vector of length `p`
+#' @param BETA Covariates coefficients vector
+#' @param X External covariates matrix with `n` rows
+#' @param Q Value of q in the data generating process. See Henderson and Shimakura (2003)
+#' @param RHO Correlation
+#' @param STRUCT Structure of the correlation matrix. Allowed values are "AR" or "COMPOUND".
+#' @param SEED Seed for reproducibility.
+#'
 #'@export
 generate_data <- function(INTERCEPT, BETA, X, Q, RHO, SEED, STRUCT){
 
@@ -45,17 +52,17 @@ generate_data <- function(INTERCEPT, BETA, X, Q, RHO, SEED, STRUCT){
     return(out)
 }
 
-#'@export
-uni_dnbinom <- function(u, n, eps){
-    nf <- factorial(n)
-
-    pr <- 1
-    for (i in 0:(n-1)) {
-        pr <- pr * (1+i*eps)
-    }
-
-    frac <- (u^n)/(nf *(1+eps*u)^(n+1/eps))
-    out <- frac * pr
-
-    return(as.numeric(out))
-}
+#' #'@export
+#' uni_dnbinom <- function(u, n, eps){
+#'     nf <- factorial(n)
+#'
+#'     pr <- 1
+#'     for (i in 0:(n-1)) {
+#'         pr <- pr * (1+i*eps)
+#'     }
+#'
+#'     frac <- (u^n)/(nf *(1+eps*u)^(n+1/eps))
+#'     out <- frac * pr
+#'
+#'     return(as.numeric(out))
+#' }

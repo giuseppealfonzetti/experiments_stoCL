@@ -3,7 +3,6 @@
 
 #include "pairClass.h"
 
-//' @export
 // [[Rcpp::export]]
 Eigen::MatrixXd sampleJ(
         Eigen::VectorXd THETA,
@@ -58,7 +57,6 @@ Eigen::MatrixXd sampleJ(
 }
 
 // Sample estimate of H (or -hessian)
-//' @export
 // [[Rcpp::export]]
 Eigen::MatrixXd sampleH(
         Eigen::VectorXd THETA,
@@ -120,6 +118,20 @@ Eigen::MatrixXd sampleH(
     return out;
 }
 
+//' Compute sample covariance matrix
+//'
+//' @param THETA Parameter vector
+//' @param DATA matrix with `n` rows and `p` columns
+//' @param X External covariates matrix with `n` rows
+//' @param STRUCT Structure of the correlation matrix. Allowed values are "AR" or "COMPOUND".
+//' @param NU Nomber of pairs per iteration on average
+//' @param METHOD Allowed choices are "ucminf", "standard", "bernoulli", "hyper",
+//' "recycle_standard", "recycle_bernoulli", "recycle_hyper"
+//' @param RANGE Number of iterations after the burn-in.
+//' @param TOTFLAG Compute total variance
+//' @param PRINTFLAG Verbose output
+//' @param PAIRS_RANGE Maximum lag between pair components
+//'
 //' @export
 // [[Rcpp::export]]
 Rcpp::List sampleVar(

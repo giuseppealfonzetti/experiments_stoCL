@@ -1,10 +1,10 @@
 Package: gammaFrailty
-Title: Pairiwse likelihood for gamma frailty models
+Title: Pairwise likelihood for gamma frailty models
 Version: 0.0.0.9000
 Authors@R: 
     person("XXX", "XXX", , "XXX@XXX.com", role = c("aut", "cre"),
            comment = c(ORCID = "XXX-XXX-XXX"))
-Description: Fit gamma frailty models for count data via pairiwse likelihood.
+Description: Fit gamma frailty models for count data via pairwise likelihood.
 License: MIT + file LICENSE
 Suggests: testthat (>= 3.0.0)
 Config/testthat/edition: 3
@@ -12,8 +12,8 @@ Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.3
 LinkingTo: Rcpp, RcppEigen, RcppClock, BH
-Imports: Rcpp
+Imports: Rcpp, RcppEigen, stats, dplyr, purrr, ucminf, mvtnorm
 NeedsCompilation: yes
-Packaged: 2024-07-02 08:27:38 UTC; pho
+Packaged: 2024-07-02 12:16:43 UTC; pho
 Author: XXX XXX [aut, cre] (XXX-XXX-XXX)
 Maintainer: XXX XXX <XXX@XXX.com>

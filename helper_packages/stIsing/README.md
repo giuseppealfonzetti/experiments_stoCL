@@ -105,7 +105,7 @@ fit <- fit_isingGraph3(
 )
 #> 1. Initialising at init vector.
 #> 2. Optimising with ucminf...
-#> 3. Done! (5.97 secs)
+#> 3. Done! (5.92 secs)
 mean((fit$theta-true_theta)^2)
 #> [1] 0.0119769
 mean((theta_init-true_theta)^2)
@@ -160,7 +160,7 @@ stFit <- fit_isingGraph3(
 #> 3. Storing results
 #> 4. Done! (0.13 secs)
 tictoc::toc()
-#> 0.472 sec elapsed
+#> 0.476 sec elapsed
 
 mean((stFit$theta-true_theta)^2)
 #> [1] 0.01282374
@@ -182,3 +182,44 @@ res |>
 ```
 
 <img src="man/figures/README-unnamed-chunk-6-1.png" width="100%" />
+
+``` r
+sessionInfo()
+#> R version 4.1.2 (2021-11-01)
+#> Platform: x86_64-pc-linux-gnu (64-bit)
+#> Running under: Ubuntu 22.04.4 LTS
+#> 
+#> Matrix products: default
+#> BLAS:   /usr/lib/x86_64-linux-gnu/blas/libblas.so.3.10.0
+#> LAPACK: /usr/lib/x86_64-linux-gnu/lapack/liblapack.so.3.10.0
+#> 
+#> locale:
+#>  [1] LC_CTYPE=it_IT.UTF-8       LC_NUMERIC=C              
+#>  [3] LC_TIME=it_IT.UTF-8        LC_COLLATE=it_IT.UTF-8    
+#>  [5] LC_MONETARY=it_IT.UTF-8    LC_MESSAGES=it_IT.UTF-8   
+#>  [7] LC_PAPER=it_IT.UTF-8       LC_NAME=C                 
+#>  [9] LC_ADDRESS=C               LC_TELEPHONE=C            
+#> [11] LC_MEASUREMENT=it_IT.UTF-8 LC_IDENTIFICATION=C       
+#> 
+#> attached base packages:
+#> [1] stats     graphics  grDevices utils     datasets  methods   base     
+#> 
+#> other attached packages:
+#> [1] purrr_1.0.2        ggplot2_3.5.1      dplyr_1.1.4        stIsing_0.0.0.9000
+#> 
+#> loaded via a namespace (and not attached):
+#>  [1] Rcpp_1.0.12         highr_0.10          pillar_1.9.0       
+#>  [4] compiler_4.1.2      plyr_1.8.8          tools_4.1.2        
+#>  [7] digest_0.6.33       evaluate_0.21       lifecycle_1.0.4    
+#> [10] tibble_3.2.1        gtable_0.3.5        ucminf_1.2.0       
+#> [13] pkgconfig_2.0.3     rlang_1.1.3         cli_3.6.2          
+#> [16] rstudioapi_0.15.0   RcppClock_1.1       yaml_2.3.7         
+#> [19] xfun_0.40           fastmap_1.1.1       withr_3.0.0        
+#> [22] knitr_1.43          tictoc_1.2          generics_0.1.3     
+#> [25] vctrs_0.6.5         nnet_7.3-17         grid_4.1.2         
+#> [28] tidyselect_1.2.0    glue_1.7.0          R6_2.5.1           
+#> [31] fansi_1.0.6         rmarkdown_2.24      farver_2.1.2       
+#> [34] IsingSampler_0.2.1  magrittr_2.0.3      scales_1.3.0       
+#> [37] htmltools_0.5.6     colorspace_2.1-0    labeling_0.4.3     
+#> [40] utf8_1.2.4          munsell_0.5.1       RcppEigen_0.3.4.0.0
+```

@@ -438,7 +438,6 @@ path_tab <- stoc_est %>%
   mutate(path_theta = map(mod, ~try(get_tidy_path3(.x, 'path_av_theta')))) %>%
   select(-mod)
 
-path_tab |> filter(row_number()==46)
 save(num_est, stoc_est, path_tab, true_tib, file = paste0('isi/data_files/', settingLab, '/est.Rda'))
 ######## variance ####
 

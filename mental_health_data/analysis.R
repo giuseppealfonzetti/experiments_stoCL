@@ -4,7 +4,6 @@ library(stIsing)
 library(tictoc)
 
 devtools::install_github("jaredhuling/jcolors")
-                         
 ising_graph_lik <- function(par){
     ncl(as.matrix(h.mat), par, rep(T, d), VERBOSEFLAG = F)$nll/nrow(h.mat)
 }
@@ -54,10 +53,6 @@ par_init <- rep(0, d) # initialisation
         MAXT = n,
         BURN = .25*n,
         STEPSIZE = 10,
-        SCALEVEC = rep(1, d),
-        PAR1 = 1,
-        PAR2 = 1,
-        PAR3 = .501,
         NU = 1,
         STEPSIZEFLAG = 0,
         SAMPLING_WINDOW = n,

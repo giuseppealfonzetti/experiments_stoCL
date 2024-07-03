@@ -6,32 +6,15 @@ library(tidyr)
 library(purrr)
 library(pbapply)
 pbo = pboptions(type="txt") 
-# General folder
-if(!dir.exists('gf/')){dir.create('gf/'); cat('[Create folder for Gamma Frailty results]') }
-
-# Folder to store .Rda files
-if(!dir.exists('gf/data_files')) {dir.create('gf/data_files'); cat('[Create data files folder]') }
-
-# Folder to store plots
-if(!dir.exists('gf/plots')) {dir.create('gf/plots'); cat('[Create plots folder]') }
-
-#'
-#' Specify setting label:
-#'
 
 settingLab <- 'II'
-if(!dir.exists(paste0('gf/data_files/', settingLab))){dir.create(paste0('gf/data_files/', settingLab)); cat('[Create setting-related data folder]')}
-
-if(!dir.exists(paste0('gf/plots/', settingLab))){dir.create(paste0('gf/plots/', settingLab)); cat('[Create setting-related plots folder]')}
-
-
 ### Setting setup ####
 
-load(paste0('gf/data_files/',settingLab,'/setting_init.Rda'))
+load(paste0('gf_sims/data_files/',settingLab,'/setting_init.Rda'))
 
 ### Simulation setup ####
 
-load(paste0('gf/data_files/',settingLab,'/sim_setup.Rda'))
+load(paste0('gf_sims/data_files/',settingLab,'/sim_setup.Rda'))
 
 #'
 #' ### Point estimation
@@ -40,11 +23,11 @@ load(paste0('gf/data_files/',settingLab,'/sim_setup.Rda'))
 ncores <- 1
 
 #### randomized ####
-load(paste0('gf/data_files/',settingLab,'/setting_init.Rda'))
-load(paste0('gf/data_files/',settingLab,'/sim_setup.Rda'))
+load(paste0('gf_sims/data_files/',settingLab,'/setting_init.Rda'))
+load(paste0('gf_sims/data_files/',settingLab,'/sim_setup.Rda'))
 
 lab <- 'randomized'
-path <- paste0('gf/data_files/', settingLab,'/',lab)
+path <- paste0('gf_sims/data_files/', settingLab,'/',lab)
 if(!dir.exists(path)){dir.create(path); cat('[Create setting-method data folder]')}
 cat(lab,':\n')
 probs <- c(.5, .25, .1)
@@ -73,6 +56,7 @@ est_obj_list <- pbapply::pblapply(
         METHOD = 'randomized',
         CPP_CONTROL = list(PROB = x$probs, SEED=x$stoc_seed),
         VERBOSEFLAG= 0,
+        PAIRS_RANGE = p,
         INIT = par_init,
         ITERATIONS_SUBSET = NULL,
         STRUCT = 'COMPOUND'
@@ -107,7 +91,8 @@ rand_par <- randomized_est |>
 #### plots ####
 library(tidyverse)
 library(ggh4x)
-plots_path <- paste0('gf/plots/')
+library(ggrepel)
+plots_path <- paste0('gf_sims/plots/')
 
 colzA <- scales::viridis_pal(option = 'G')(8)
 colzB <- scales::viridis_pal(option = 'B')(8)
@@ -119,7 +104,7 @@ numcol <- '#0B0405FF'
 
 
 #### Mean square error ####
-mse_tot_30 <- readRDS(paste0('gf/data_files/',settingLab,'/plots/gg/mse_tot.rds'))
+mse_tot_30 <- readRDS(paste0('gf_sims/plots/',settingLab,'/gg/mse_tot.rds'))
 
 join_stoc_mse <- mse_tot_30$data |>
   mutate(p = 30)|>

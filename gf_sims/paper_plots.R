@@ -1,6 +1,6 @@
 library(tidyverse)
 library(ggh4x)
-plots_path <- paste0('gf/plots/')
+plots_path <- paste0('gf_sims/plots/')
 
 colzA <- scales::viridis_pal(option = 'G')(8)
 colzB <- scales::viridis_pal(option = 'B')(8)
@@ -11,8 +11,8 @@ numcol <- '#0B0405FF'
 
 
 #### Mean square error ####
-mse_tot_20 <- readRDS("gf_sims/gf/data_files/I/plots/gg/mse_tot.rds")
-mse_tot_30 <- readRDS("gf_sims/gf/data_files/II/plots/gg/mse_tot.rds")
+mse_tot_20 <- readRDS("gf_sims/plots/I/gg/mse_tot.rds")
+mse_tot_30 <- readRDS("gf_sims/plots/II/gg/mse_tot.rds")
 
 join_stoc_mse <- mse_tot_20$data %>%
     mutate(p = 20) %>%
@@ -31,8 +31,8 @@ join_num_mse <- mse_tot_20$layers[[2]]$data %>%
     rename(n = sample_size)
 
 gg_join_mse <- join_stoc_mse %>%
-    filter(meth %in% c('recycle_hyper_500', 'recycle_standard')) %>%
-    mutate(meth = map_chr(meth, ~if_else(.x=='recycle_hyper_500', 'recycle_hyper', .x))) %>%
+    filter(meth %in% c('recycle_hyper_500', 'recycle_standard_500')) %>%
+    # mutate(meth = map_chr(meth, ~if_else(.x=='recycle_hyper_500', 'recycle_hyper', .x))) %>%
     ggplot(aes(x = pass, y = log(mse)))+
     geom_rect(aes(xmin=-Inf,xmax=.25,ymin=-Inf,ymax=Inf),
               fill="lightgrey", color =NA)+
@@ -49,8 +49,8 @@ ggsave(plot = gg_join_mse, filename = paste0(plots_path, 'gg_join_mse.pdf'), wid
 
 
 #### Variance trace ####
-var_tr_20 <- readRDS("gf_sims/gf/data_files/I/plots/gg/var_tr.rds")
-var_tr_30 <- readRDS("gf_sims/gf/data_files/II/plots/gg/var_tr.rds")
+var_tr_20 <- readRDS("gf_sims/plots/I/gg/var_tr.rds")
+var_tr_30 <- readRDS("gf_sims/plots/II/gg/var_tr.rds")
 
 join_stoc_tr <- var_tr_20$data %>%
     mutate(p = 20) %>%
@@ -69,8 +69,8 @@ join_num_tr <- var_tr_20$layers[[1]]$data %>%
     rename(n = sample_size)
 
 gg_join_var <- join_stoc_tr %>%
-    filter(meth %in% c('recycle_hyper_500', 'recycle_standard')) %>%
-    mutate(meth = map_chr(meth, ~if_else(.x=='recycle_hyper_500', 'recycle_hyper', .x))) %>%
+    filter(meth %in% c('recycle_hyper_500', 'recycle_standard_500')) %>%
+    # mutate(meth = map_chr(meth, ~if_else(.x=='recycle_hyper_500', 'recycle_hyper', .x))) %>%
     ggplot(aes(x = pass, y = (tr)))+
     geom_hline(data = join_num_tr,
                aes(yintercept = (tr)),  col = numcol, linetype = 'dashed', alpha = 0.5) +
@@ -84,8 +84,8 @@ gg_join_var <- join_stoc_tr %>%
 ggsave(plot = gg_join_var, filename = paste0(plots_path, 'gg_join_var.pdf'), width = 8, height = 5)
 
 #### Inference ####
-cov_lines20 <- readRDS("gf_sims/gf/data_files/I/plots/gg/cov_lines.rds")
-cov_lines30 <- readRDS("gf_sims/gf/data_files/II/plots/gg/cov_lines.rds")
+cov_lines20 <- readRDS("gf_sims/plots/I/gg/cov_lines.rds")
+cov_lines30 <- readRDS("gf_sims/plots/II/gg/cov_lines.rds")
 
 join_stoc_cov <- cov_lines20$data %>%
     mutate(p = 20) %>%
@@ -105,8 +105,8 @@ join_num_cov <- cov_lines20$layers[[3]]$data %>%
     rename(n = sample_size)
 
 gg_join_cov <- join_stoc_cov %>%
-    filter(meth %in% c('recycle_hyper_500', 'recycle_standard')) %>%
-    mutate(meth = map_chr(meth, ~if_else(.x=='recycle_hyper_500', 'recycle_hyper', .x))) %>%
+    filter(meth %in% c('recycle_hyper_500', 'recycle_standard_500')) %>%
+    # mutate(meth = map_chr(meth, ~if_else(.x=='recycle_hyper_500', 'recycle_hyper', .x))) %>%
     mutate(n = factor(n, levels = unique(join_num_cov$n), labels = paste0('n = ', unique(join_num_cov$n))),
            p = factor(p, levels = unique(join_num_cov$p), labels = paste0('p = ', unique(join_num_cov$p)))) %>%
     ggplot(aes(x = pass, y = coverage, col = meth, group = interaction(meth, par)) )+
@@ -125,8 +125,8 @@ ggsave(plot = gg_join_cov, filename = paste0(plots_path, 'gg_join_cov.pdf'), wid
 
 
 #### Appendix plots ####
-appendix_mse_20 <- readRDS("gf_sims/gf/data_files/I/plots/gg/appendix_mse.rds")
-appendix_mse_30 <- readRDS("gf_sims/gf/data_files/II/plots/gg/appendix_mse.rds")
+appendix_mse_20 <- readRDS("gf_sims/plots/I/gg/appendix_mse.rds")
+appendix_mse_30 <- readRDS("gf_sims/plots/II/gg/appendix_mse.rds")
 
 join_appendix_stoc_mse <- appendix_mse_20$data %>%
     mutate(p = 20) %>%
@@ -209,8 +209,8 @@ ggsave(plot = gg_app_zoom, filename = paste0(plots_path, 'gg_app_zoom.pdf'), wid
 
 
 #### variance ####
-appendix_var_tr_20 <- readRDS("gf_sims/gf/data_files/I/plots/gg/appendix_var_tr.rds")
-appendix_var_tr_30 <- readRDS("gf_sims/gf/data_files/II/plots/gg/appendix_var_tr.rds")
+appendix_var_tr_20 <- readRDS("gf_sims/plots/I/gg/appendix_var_tr.rds")
+appendix_var_tr_30 <- readRDS("gf_sims/plots/II/gg/appendix_var_tr.rds")
 
 join_stoc_tr <- appendix_var_tr_20$data %>%
     mutate(p = 20) %>%
@@ -240,8 +240,8 @@ join_stoc_tr  %>%
     theme(legend.position = 'bottom')
 
 #### coverage ####
-appendix_cov_lines_20 <- readRDS("gf_sims/gf/data_files/I/plots/gg/appendix_cov_lines.rds")
-appendix_cov_lines_30 <- readRDS("gf_sims/gf/data_files/II/plots/gg/appendix_cov_lines.rds")
+appendix_cov_lines_20 <- readRDS("gf_sims/plots/I/gg/appendix_cov_lines.rds")
+appendix_cov_lines_30 <- readRDS("gf_sims/plots/II/gg/appendix_cov_lines.rds")
 
 join_stoc_cov <- appendix_cov_lines_20$data %>%
     mutate(p = 20) %>%

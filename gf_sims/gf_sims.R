@@ -6,22 +6,20 @@ library(tidyr)
 library(purrr)
 library(pbapply)
 pbo = pboptions(type="txt")
-# General folder
-if(!dir.exists('gf/')){dir.create('gf/'); cat('[Create folder for Gamma Frailty results]') }
 
 # Folder to store .Rda files
-if(!dir.exists('gf/data_files')) {dir.create('gf/data_files'); cat('[Create data files folder]') }
+if(!dir.exists('gf_sims/data_files')) {dir.create('gf_sims/data_files'); cat('[Create data files folder]') }
 
 # Folder to store plots
-if(!dir.exists('gf/plots')) {dir.create('gf/plots'); cat('[Create plots folder]') }
+if(!dir.exists('gf_sims/plots')) {dir.create('gf_sims/plots'); cat('[Create plots folder]') }
 
 # Run  with settingLab <- 'I' and p <- 20 for the smaller setting 
 # Run  with settingLab <- 'II' and p <- 30 for the larger setting 
 
 settingLab <- 'I'
-if(!dir.exists(paste0('gf/data_files/', settingLab))){dir.create(paste0('gf/data_files/', settingLab)); cat('[Create setting-related data folder]')}
+if(!dir.exists(paste0('gf_sims/data_files/', settingLab))){dir.create(paste0('gf_sims/data_files/', settingLab)); cat('[Create setting-related data folder]')}
 
-if(!dir.exists(paste0('gf/plots/', settingLab))){dir.create(paste0('gf/plots/', settingLab)); cat('[Create setting-related plots folder]')}
+if(!dir.exists(paste0('gf_sims/plots/', settingLab))){dir.create(paste0('gf_sims/plots/', settingLab)); cat('[Create setting-related plots folder]')}
 
 
 ### Setting setup ####
@@ -43,12 +41,12 @@ repar_theta <- partorepar(theta)
 d <- length(theta)
 correlation_structure <- 'COMPOUND'
 # save setting setup
-save(p, q, xi, rho, m, int, b, theta, repar_theta, d, settingLab, correlation_structure, file = paste0('gf/data_files/', settingLab,'/setting_init.Rda'))
+save(p, q, xi, rho, m, int, b, theta, repar_theta, d, settingLab, correlation_structure, file = paste0('gf_sims/data_files/', settingLab,'/setting_init.Rda'))
 cat('[Setting setup saved]')
 
 
 ### Simulation setup ####
-load(paste0('gf/data_files/',settingLab,'/setting_init.Rda'))
+load(paste0('gf_sims/data_files/',settingLab,'/setting_init.Rda'))
 set.seed(123)
 par_init <- rep(0, length(theta))
 sample_sizes <- c(2.5e3, 5e3, 10e3)
@@ -79,7 +77,7 @@ sim_settings <- expand_grid(
         scls = map(scaling_list, ~.x$vec)
     ) %>%
     select(-scaling_list)
-save(sample_sizes, range_lag, par_init, nsim, stepsizes, sim_settings, npasses, burn, file = paste0('gf/data_files/',settingLab,'/sim_setup.Rda'))
+save(sample_sizes, range_lag, par_init, nsim, stepsizes, sim_settings, npasses, burn, file = paste0('gf_sims/data_files/',settingLab,'/sim_setup.Rda'))
 cat('[Simulation setup saved]')
 
 
@@ -88,11 +86,11 @@ ncores <- 1
 
 
 #### ucminf ####
-load(paste0('gf/data_files/',settingLab,'/setting_init.Rda'))
-load(paste0('gf/data_files/',settingLab,'/sim_setup.Rda'))
+load(paste0('gf_sims/data_files/',settingLab,'/setting_init.Rda'))
+load(paste0('gf_sims/data_files/',settingLab,'/sim_setup.Rda'))
 
 lab <- 'ucminf'
-path <- paste0('gf/data_files/', settingLab,'/',lab)
+path <- paste0('gf_sims/data_files/', settingLab,'/',lab)
 if(!dir.exists(path)){dir.create(path); cat('[Create setting-method data folder]')}
 cat(lab,':\n')
 
@@ -135,11 +133,11 @@ save(est_obj_list, file = paste0(path,'/est.Rda'))
 
 
 ### standard ####
-load(paste0('gf/data_files/',settingLab,'/setting_init.Rda'))
-load(paste0('gf/data_files/',settingLab,'/sim_setup.Rda'))
+load(paste0('gf_sims/data_files/',settingLab,'/setting_init.Rda'))
+load(paste0('gf_sims/data_files/',settingLab,'/sim_setup.Rda'))
 
 lab <- 'standard'
-path <- paste0('gf/data_files/', settingLab,'/',lab)
+path <- paste0('gf_sims/data_files/', settingLab,'/',lab)
 if(!dir.exists(path)){dir.create(path); cat('[Create setting-method data folder]')}
 cat(lab,':\n')
 
@@ -166,9 +164,6 @@ est_obj_list <- pbapply::pblapply(
             MAXT = x$maxiter,
             BURN = x$burn,
             STEPSIZE = x$stepsize,
-            SCALEVEC = x$scls,
-            PAR2 = x$stepsize,
-            PAR3 = .501,
             NU = 1,
             STEPSIZEFLAG = 0,
             SAMPLING_WINDOW = 500,
@@ -200,11 +195,11 @@ est_obj_list <- pbapply::pblapply(
 save(est_obj_list, file = paste0(path,'/est.Rda'))
 
 #### recycle_standard_500 ####
-load(paste0('gf/data_files/',settingLab,'/setting_init.Rda'))
-load(paste0('gf/data_files/',settingLab,'/sim_setup.Rda'))
+load(paste0('gf_sims/data_files/',settingLab,'/setting_init.Rda'))
+load(paste0('gf_sims/data_files/',settingLab,'/sim_setup.Rda'))
 
 lab <- 'recycle_standard_500'
-path <- paste0('gf/data_files/', settingLab,'/',lab)
+path <- paste0('gf_sims/data_files/', settingLab,'/',lab)
 if(!dir.exists(path)){dir.create(path); cat('[Create setting-method data folder]')}
 cat(lab,':\n')
 
@@ -231,9 +226,6 @@ est_obj_list <- pbapply::pblapply(
             MAXT = x$maxiter,
             BURN = x$burn,
             STEPSIZE = x$stepsize,
-            SCALEVEC = x$scls,
-            PAR2 = x$stepsize,
-            PAR3 = .501,
             NU = 1,
             STEPSIZEFLAG = 0,
             SAMPLING_WINDOW = 500,
@@ -267,11 +259,11 @@ save(est_obj_list, file = paste0(path,'/est.Rda'))
 
 
 #### recycle_hyper_100 ####
-load(paste0('gf/data_files/',settingLab,'/setting_init.Rda'))
-load(paste0('gf/data_files/',settingLab,'/sim_setup.Rda'))
+load(paste0('gf_sims/data_files/',settingLab,'/setting_init.Rda'))
+load(paste0('gf_sims/data_files/',settingLab,'/sim_setup.Rda'))
 
 lab <- 'recycle_hyper'
-path <- paste0('gf/data_files/', settingLab,'/',lab)
+path <- paste0('gf_sims/data_files/', settingLab,'/',lab)
 if(!dir.exists(path)){dir.create(path); cat('[Create setting-method data folder]')}
 cat(lab,':\n')
 
@@ -298,9 +290,6 @@ est_obj_list <- pbapply::pblapply(
             MAXT = x$maxiter,
             BURN = x$burn,
             STEPSIZE = x$stepsize,
-            SCALEVEC = x$scls,
-            PAR2 = x$stepsize,
-            PAR3 = .501,
             NU = 1,
             STEPSIZEFLAG = 0,
             SAMPLING_WINDOW = 100,
@@ -332,11 +321,11 @@ save(est_obj_list, file = paste0(path,'/est.Rda'))
 
 
 #### recycle_hyper_500 ####
-load(paste0('gf/data_files/',settingLab,'/setting_init.Rda'))
-load(paste0('gf/data_files/',settingLab,'/sim_setup.Rda'))
+load(paste0('gf_sims/data_files/',settingLab,'/setting_init.Rda'))
+load(paste0('gf_sims/data_files/',settingLab,'/sim_setup.Rda'))
 
 lab <- 'recycle_hyper_500'
-path <- paste0('gf/data_files/', settingLab,'/',lab)
+path <- paste0('gf_sims/data_files/', settingLab,'/',lab)
 if(!dir.exists(path)){dir.create(path); cat('[Create setting-method data folder]')}
 cat(lab,':\n')
 
@@ -363,9 +352,6 @@ est_obj_list <- pbapply::pblapply(
             MAXT = x$maxiter,
             BURN = x$burn,
             STEPSIZE = x$stepsize,
-            SCALEVEC = x$scls,
-            PAR2 = x$stepsize,
-            PAR3 = .501,
             NU = 1,
             STEPSIZEFLAG = 0,
             SAMPLING_WINDOW = 500,
@@ -394,11 +380,11 @@ est_obj_list <- pbapply::pblapply(
 save(est_obj_list, file = paste0(path,'/est.Rda'))
 
 #### recycle_hyper_1000 ####
-load(paste0('gf/data_files/',settingLab,'/setting_init.Rda'))
-load(paste0('gf/data_files/',settingLab,'/sim_setup.Rda'))
+load(paste0('gf_sims/data_files/',settingLab,'/setting_init.Rda'))
+load(paste0('gf_sims/data_files/',settingLab,'/sim_setup.Rda'))
 
 lab <- 'recycle_hyper_1000'
-path <- paste0('gf/data_files/', settingLab,'/',lab)
+path <- paste0('gf_sims/data_files/', settingLab,'/',lab)
 if(!dir.exists(path)){dir.create(path); cat('[Create setting-method data folder]')}
 cat(lab,':\n')
 
@@ -425,9 +411,6 @@ est_obj_list <- pbapply::pblapply(
             MAXT = x$maxiter,
             BURN = x$burn,
             STEPSIZE = x$stepsize,
-            SCALEVEC = x$scls,
-            PAR2 = x$stepsize,
-            PAR3 = .501,
             NU = 1,
             STEPSIZEFLAG = 0,
             SAMPLING_WINDOW = 1000,
@@ -459,34 +442,34 @@ save(est_obj_list, file = paste0(path,'/est.Rda'))
 
 
 #### COLLECT #####
-load(paste0('gf/data_files/',settingLab,'/setting_init.Rda'))
-load(paste0('gf/data_files/',settingLab,'/sim_setup.Rda'))
+load(paste0('gf_sims/data_files/',settingLab,'/setting_init.Rda'))
+load(paste0('gf_sims/data_files/',settingLab,'/sim_setup.Rda'))
 
 true_tib <- tibble(par = 1:length(repar_theta), true_val = repar_theta) #%>%  mutate_at(vars(par), as.factor)
-load(paste0('gf/data_files/', settingLab, '/ucminf/est.Rda'))
+load(paste0('gf_sims/data_files/', settingLab, '/ucminf/est.Rda'))
 num_est <- sim_settings %>%
     mutate(stepsize = NA, scaling = NA, scls = NA, maxiter = NA, burn = NA, meth = 'ucminf') %>%
     distinct() %>%
     mutate(mod = est_obj_list)
 
-load(paste0('gf/data_files/', settingLab, '/recycle_standard_500/est.Rda'))
+load(paste0('gf_sims/data_files/', settingLab, '/recycle_standard_500/est.Rda'))
 recycle_standard_500_est <- sim_settings %>%
     mutate(meth = 'recycle_standard_500') %>%
     distinct() %>%
     mutate(mod = est_obj_list)
 
-load(paste0('gf/data_files/', settingLab, '/recycle_hyper/est.Rda'))
+load(paste0('gf_sims/data_files/', settingLab, '/recycle_hyper/est.Rda'))
 recycle_hyper_est <- sim_settings %>%
     mutate(meth = 'recycle_hyper_100') %>%
     distinct() %>%
     mutate(mod = est_obj_list)
 
-load(paste0('gf/data_files/', settingLab, '/recycle_hyper_500/est.Rda'))
+load(paste0('gf_sims/data_files/', settingLab, '/recycle_hyper_500/est.Rda'))
 recycle_hyper_500_est <- sim_settings %>%
     mutate(meth = 'recycle_hyper_500') %>%
     distinct() %>%
     mutate(mod = est_obj_list)
-load(paste0('gf/data_files/', settingLab, '/recycle_hyper_1000/est.Rda'))
+load(paste0('gf_sims/data_files/', settingLab, '/recycle_hyper_1000/est.Rda'))
 recycle_hyper_1000_est <- sim_settings %>%
     mutate(meth = 'recycle_hyper_1000') %>%
     distinct() %>%
@@ -504,12 +487,12 @@ path_tab <- stoc_est %>%
     mutate(path_theta = map(mod, ~get_tidy_path(.x, 'path_av_theta', F))) %>%
     select(-mod)
 
-save(num_est, stoc_est, path_tab, true_tib, file = paste0('gf/data_files/', settingLab, '/est.Rda'))
+save(num_est, stoc_est, path_tab, true_tib, file = paste0('gf_sims/data_files/', settingLab, '/est.Rda'))
 
 #### variance ####
-load(paste0('gf/data_files/',settingLab,'/setting_init.Rda'))
-load(paste0('gf/data_files/',settingLab,'/sim_setup.Rda'))
-load(paste0('gf/data_files/',settingLab,'/est.Rda'))
+load(paste0('gf_sims/data_files/',settingLab,'/setting_init.Rda'))
+load(paste0('gf_sims/data_files/',settingLab,'/sim_setup.Rda'))
+load(paste0('gf_sims/data_files/',settingLab,'/est.Rda'))
 selected_passes <- seq(.5,npasses,.5)
 
 #### Computation ####
@@ -575,7 +558,7 @@ var_list <- pbapply::pblapply(path_selected %>% purrr::transpose(),
     cl = ncores)
 
 path_selected$asy_var <- var_list
-save(path_selected, file = paste0('gf/data_files/', settingLab,'/','path_variance.Rda'))
+save(path_selected, file = paste0('gf_sims/data_files/', settingLab,'/','path_variance.Rda'))
 
 
 var_list_num <- pbapply::pblapply(num_est %>% purrr::transpose(),
@@ -633,7 +616,7 @@ var_list_num <- pbapply::pblapply(num_est %>% purrr::transpose(),
                                   cl = ncores)
 num_est$asy_var <- var_list_num
 
-save(num_est, file = paste0('gf/data_files/', settingLab,'/','num_variance.Rda'))
+save(num_est, file = paste0('gf_sims/data_files/', settingLab,'/','num_variance.Rda'))
 
 
 

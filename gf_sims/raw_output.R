@@ -7,9 +7,9 @@ library(ggh4x)
 library(tidyverse)
 #### choose setting folder ####
 settingLab <- 'I'
-load(paste0('gf/data_files/',settingLab,'/setting_init.Rda'))
-load(paste0('gf/data_files/',settingLab,'/sim_setup.Rda'))
-plots_path <- paste0('gf/data_files/', settingLab, '/plots/')
+load(paste0('gf_sims/data_files/',settingLab,'/setting_init.Rda'))
+load(paste0('gf_sims/data_files/',settingLab,'/sim_setup.Rda'))
+plots_path <- paste0('gf_sims/plots/', settingLab, '/')
 if(!dir.exists(plots_path)){dir.create(plots_path); cat('[Create setting-related data folder]')}
 if(!dir.exists(paste0(plots_path,'gg/'))){dir.create(paste0(plots_path,'gg/')); cat('[Create setting-related data folder]')}
 
@@ -24,7 +24,7 @@ colz <- c(colzA[c(3, 4, 6)], colzB[c(6, 4, 7)])
 numcol <- '#0B0405FF'
 
 #### pointwise results ####
-load(paste0('gf/data_files/',settingLab,'/est.Rda'))
+load(paste0('gf_sims/data_files/',settingLab,'/est.Rda'))
 
 
 
@@ -269,8 +269,8 @@ ggsave(plot = gg_clock, filename = paste0(plots_path, 'gg_clock.pdf'), width = 1
 
 
 #### Inference results ####
-load(paste0('gf/data_files/', settingLab,'/','path_variance.Rda'))
-load(paste0('gf/data_files/', settingLab,'/','num_variance.Rda'))
+load(paste0('gf_sims/data_files/', settingLab,'/','path_variance.Rda'))
+load(paste0('gf_sims/data_files/', settingLab,'/','num_variance.Rda'))
 selected_passes <- seq(.5,npasses,.5)
 
 sample_sd_num <- num_est %>%

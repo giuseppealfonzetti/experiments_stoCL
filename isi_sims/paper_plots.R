@@ -1,6 +1,6 @@
 library(tidyverse)
 library(ggh4x)
-plots_path <- paste0('isi/plots/')
+plots_path <- paste0('isi_sims/plots/')
 
 colzA <- scales::viridis_pal(option = 'G')(8)
 colzB <- scales::viridis_pal(option = 'B')(8)
@@ -13,8 +13,8 @@ numcol <- '#0B0405FF'
 
 
 #### Mean square error ####
-mse_tot_10 <- readRDS("isi/data_files/I/plots/gg/mse_tot.rds")
-mse_tot_20 <- readRDS("isi/data_files/II/plots/gg/mse_tot.rds")
+mse_tot_10 <- readRDS("isi_sims/plots/I/gg/mse_tot.rds")
+mse_tot_20 <- readRDS("isi_sims/plots/II/gg/mse_tot.rds")
 
 join_stoc_mse <- mse_tot_10$data %>%
     mutate(p = 10) %>%
@@ -50,8 +50,8 @@ ggsave(plot = gg_join_mse, filename = paste0(plots_path, 'gg_join_mse.pdf'), wid
 
 
 #### Variance trace ####
-var_tr_10 <- readRDS("isi/data_files/I/plots/gg/var_tr.rds")
-var_tr_20 <- readRDS("isi/data_files/II/plots/gg/var_tr.rds")
+var_tr_10 <- readRDS("isi_sims/plots/I/gg/var_tr.rds")
+var_tr_20 <- readRDS("isi_sims/plots/II/gg/var_tr.rds")
 
 join_stoc_tr <- var_tr_10$data %>%
     mutate(p = 10) %>%
@@ -84,8 +84,8 @@ gg_join_var <- join_stoc_tr %>%
 ggsave(plot = gg_join_var, filename = paste0(plots_path, 'gg_join_var.pdf'), width = 8, height = 5)
 
 #### Inference ####
-cov_lines10 <- readRDS("isi/data_files/I/plots/gg/cov_lines.rds")
-cov_lines20 <- readRDS("isi/data_files/II/plots/gg/cov_lines.rds")
+cov_lines10 <- readRDS("isi_sims/plots/I/gg/cov_lines.rds")
+cov_lines20 <- readRDS("isi_sims/plots/II/gg/cov_lines.rds")
 
 join_stoc_cov <- cov_lines10$data %>%
     mutate(p = 10) %>%
@@ -121,9 +121,9 @@ gg_join_cov <- join_stoc_cov  %>%
 gg_join_cov
 ggsave(plot = gg_join_cov, filename = paste0(plots_path, 'gg_join_cov.pdf'), width = 8, height = 5)
 
-#### Appendix ####
-appendix_mse_10 <- readRDS("~/local_projects/ising_sims/isi/data_files/I/plots/gg/appendix_mse.rds")
-appendix_mse_20 <- readRDS("~/local_projects/ising_sims/isi/data_files/II/plots/gg/appendix_mse.rds")
+#### Appendix mse ####
+appendix_mse_10 <- readRDS("isi_sims/plots/I/gg/appendix_mse.rds")
+appendix_mse_20 <- readRDS("isi_sims/plots/II/gg/appendix_mse.rds")
 
 join_appendix_stoc_mse <- appendix_mse_10$data %>%
     mutate(p = 10) %>%
@@ -155,6 +155,7 @@ gg_app_join_stepsize <- join_appendix_stoc_mse %>%
 ggsave(plot = gg_app_join_stepsize, filename = paste0(plots_path, 'gg_app_join_stepsize.pdf'), width = 10, height = 8)
 
 gg_app_join_mse <- join_appendix_stoc_mse %>%
+    filter(pass %in% seq(0,3, by = .25)) %>%
     mutate(n = factor(n, levels = unique(join_appendix_stoc_mse$n), labels = paste0('n = ', unique(join_appendix_stoc_mse$n))),
            p = factor(p, levels = unique(join_appendix_stoc_mse$p), labels = paste0('p = ', unique(join_appendix_stoc_mse$p)))) %>%
     filter(par_type!='all') %>%
@@ -173,9 +174,9 @@ gg_app_join_mse <- join_appendix_stoc_mse %>%
     theme(legend.position = 'bottom')
 ggsave(plot = gg_app_join_mse, filename = paste0(plots_path, 'gg_app_join_mse.pdf'), width = 10, height = 10)
 
-#####
-appendix_cov_lines_10 <- readRDS("~/local_projects/ising_sims/isi/data_files/I/plots/gg/appendix_cov_lines.rds")
-appendix_cov_lines_20 <- readRDS("~/local_projects/ising_sims/isi/data_files/II/plots/gg/appendix_cov_lines.rds")
+#### Appendix coverage ####
+appendix_cov_lines_10 <- readRDS("isi_sims/plots/I/gg/appendix_cov_lines.rds")
+appendix_cov_lines_20 <- readRDS("isi_sims/plots/II/gg/appendix_cov_lines.rds")
 
 join_stoc_cov <- appendix_cov_lines_10$data %>%
     mutate(p = 10) %>%

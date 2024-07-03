@@ -8,15 +8,11 @@ library(ggplot2)
 library(ggh4x)
 library(IsingSampler)
 
-# General folder
-if(!dir.exists('isi/')){dir.create('isi/'); cat('[Create folder for Ising results]') }
-
 # Folder to store .Rda files
-if(!dir.exists('isi/data_files')) {dir.create('isi/data_files'); cat('[Create data files folder]') }
+if(!dir.exists('isi_sims/data_files')) {dir.create('isi_sims/data_files'); cat('[Create data files folder]') }
 
 # Folder to store plots
-if(!dir.exists('isi/plots')) {dir.create('isi/plots'); cat('[Create plots folder]') }
-
+if(!dir.exists('isi_sims/plots')) {dir.create('isi_sims/plots'); cat('[Create plots folder]') }
 
 ## Specify setting label:
 
@@ -24,9 +20,9 @@ if(!dir.exists('isi/plots')) {dir.create('isi/plots'); cat('[Create plots folder
 # Run  with settingLab <- 'II' and p <- 20 for the larger setting 
 
 settingLab <- 'I'
-if(!dir.exists(paste0('isi/data_files/', settingLab))){dir.create(paste0('isi/data_files/', settingLab)); cat('[Create setting-related data folder]')}
+if(!dir.exists(paste0('isi_sims/data_files/', settingLab))){dir.create(paste0('isi_sims/data_files/', settingLab)); cat('[Create setting-related data folder]')}
 
-if(!dir.exists(paste0('isi/plots/', settingLab))){dir.create(paste0('isi/plots/', settingLab)); cat('[Create setting-related plots folder]')}
+if(!dir.exists(paste0('isi_sims/plots/', settingLab))){dir.create(paste0('isi_sims/plots/', settingLab)); cat('[Create setting-related plots folder]')}
 
 
 ### Setting setup ####
@@ -59,12 +55,12 @@ graph_mat <- graph_mat + t(graph_mat)
 thr_vec <- true_theta[1:p]
 
 # save setting setup
-save(p, d, parNodes, parEdgesMat, true_theta, Q, graph_mat, thr_vec, settingLab,  file = paste0('isi/data_files/', settingLab,'/setting_init.Rda'))
+save(p, d, parNodes, parEdgesMat, true_theta, Q, graph_mat, thr_vec, settingLab,  file = paste0('isi_sims/data_files/', settingLab,'/setting_init.Rda'))
 cat('[Setting setup saved]')
 
 ### Simulation setup ####
 
-load(paste0('isi/data_files/',settingLab,'/setting_init.Rda'))
+load(paste0('isi_sims/data_files/',settingLab,'/setting_init.Rda'))
 set.seed(123)
 par_init <- rep(0, d)
 
@@ -96,7 +92,7 @@ sim_settings <- expand_grid(
         scls = map(scaling_list, ~.x$vec)
     ) %>%
     select(-scaling_list)
-save(sample_sizes, par_init, nsim, stepsizes, sim_settings, npasses, burn, file = paste0('isi/data_files/',settingLab,'/sim_setup.Rda'))
+save(sample_sizes, par_init, nsim, stepsizes, sim_settings, npasses, burn, file = paste0('isi_sims/data_files/',settingLab,'/sim_setup.Rda'))
 cat('[Simulation setup saved]')
 
 
@@ -106,11 +102,11 @@ ncores <- 1
 
 
 #### ucminf ####
-load(paste0('isi/data_files/',settingLab,'/setting_init.Rda'))
-load(paste0('isi/data_files/',settingLab,'/sim_setup.Rda'))
+load(paste0('isi_sims/data_files/',settingLab,'/setting_init.Rda'))
+load(paste0('isi_sims/data_files/',settingLab,'/sim_setup.Rda'))
 
 lab <- 'ucminf'
-path <- paste0('isi/data_files/', settingLab,'/',lab)
+path <- paste0('isi_sims/data_files/', settingLab,'/',lab)
 if(!dir.exists(path)){dir.create(path); cat('[Create setting-method data folder]')}
 cat(lab,':\n')
 
@@ -141,11 +137,11 @@ save(est_obj_list, file = paste0(path,'/est.Rda'))
 
 
 #### STANDARD ####
-load(paste0('isi/data_files/',settingLab,'/setting_init.Rda'))
-load(paste0('isi/data_files/',settingLab,'/sim_setup.Rda'))
+load(paste0('isi_sims/data_files/',settingLab,'/setting_init.Rda'))
+load(paste0('isi_sims/data_files/',settingLab,'/sim_setup.Rda'))
 
 lab <- 'standard'
-path <- paste0('isi/data_files/', settingLab,'/',lab)
+path <- paste0('isi_sims/data_files/', settingLab,'/',lab)
 if(!dir.exists(path)){dir.create(path); cat('[Create setting-method data folder]')}
 cat(lab,':\n')
 
@@ -162,10 +158,10 @@ est_obj_list <- pbapply::pblapply(
       MAXT = x$maxiter,
       BURN = x$burn,
       STEPSIZE = x$stepsize,
-      SCALEVEC = x$scls,
-      PAR1 = 1,
-      PAR2 = x$stepsize,
-      PAR3 = .501,
+      # SCALEVEC = x$scls,
+      # PAR1 = 1,
+      # PAR2 = x$stepsize,
+      # PAR3 = .501,
       NU = 1,
       STEPSIZEFLAG = 0,
       SAMPLING_WINDOW = 1,
@@ -192,11 +188,11 @@ save(est_obj_list, file = paste0(path,'/est.Rda'))
 
 
 #### BERNOULLI ####
-load(paste0('isi/data_files/',settingLab,'/setting_init.Rda'))
-load(paste0('isi/data_files/',settingLab,'/sim_setup.Rda'))
+load(paste0('isi_sims/data_files/',settingLab,'/setting_init.Rda'))
+load(paste0('isi_sims/data_files/',settingLab,'/sim_setup.Rda'))
 
 lab <- 'bernoulli'
-path <- paste0('isi/data_files/', settingLab,'/',lab)
+path <- paste0('isi_sims/data_files/', settingLab,'/',lab)
 if(!dir.exists(path)){dir.create(path); cat('[Create setting-method data folder]')}
 cat(lab,':\n')
 
@@ -213,10 +209,10 @@ est_obj_list <- pbapply::pblapply(
       MAXT = x$maxiter,
       BURN = x$burn,
       STEPSIZE = x$stepsize,
-      SCALEVEC = x$scls,
-      PAR1 = 1,
-      PAR2 = x$stepsize,
-      PAR3 = .501,
+      # SCALEVEC = x$scls,
+      # PAR1 = 1,
+      # PAR2 = x$stepsize,
+      # PAR3 = .501,
       NU = 1,
       STEPSIZEFLAG = 0,
       SAMPLING_WINDOW = 1,
@@ -241,11 +237,11 @@ save(est_obj_list, file = paste0(path,'/est.Rda'))
 
 
 #### HYPER ####
-load(paste0('isi/data_files/',settingLab,'/setting_init.Rda'))
-load(paste0('isi/data_files/',settingLab,'/sim_setup.Rda'))
+load(paste0('isi_sims/data_files/',settingLab,'/setting_init.Rda'))
+load(paste0('isi_sims/data_files/',settingLab,'/sim_setup.Rda'))
 
 lab <- 'hyper'
-path <- paste0('isi/data_files/', settingLab,'/',lab)
+path <- paste0('isi_sims/data_files/', settingLab,'/',lab)
 if(!dir.exists(path)){dir.create(path); cat('[Create setting-method data folder]')}
 cat(lab,':\n')
 
@@ -262,10 +258,10 @@ est_obj_list <- pbapply::pblapply(
       MAXT = x$maxiter,
       BURN = x$burn,
       STEPSIZE = x$stepsize,
-      SCALEVEC = x$scls,
-      PAR1 = 1,
-      PAR2 = x$stepsize,
-      PAR3 = .501,
+      # SCALEVEC = x$scls,
+      # PAR1 = 1,
+      # PAR2 = x$stepsize,
+      # PAR3 = .501,
       NU = 1,
       STEPSIZEFLAG = 0,
       SAMPLING_WINDOW = 1,
@@ -289,11 +285,11 @@ est_obj_list <- pbapply::pblapply(
 save(est_obj_list, file = paste0(path,'/est.Rda'))
 
 #### RECYCLE STANDARD ####
-load(paste0('isi/data_files/',settingLab,'/setting_init.Rda'))
-load(paste0('isi/data_files/',settingLab,'/sim_setup.Rda'))
+load(paste0('isi_sims/data_files/',settingLab,'/setting_init.Rda'))
+load(paste0('isi_sims/data_files/',settingLab,'/sim_setup.Rda'))
 
 lab <- 'recycle_standard'
-path <- paste0('isi/data_files/', settingLab,'/',lab)
+path <- paste0('isi_sims/data_files/', settingLab,'/',lab)
 if(!dir.exists(path)){dir.create(path); cat('[Create setting-method data folder]')}
 cat(lab,':\n')
 
@@ -310,10 +306,10 @@ est_obj_list <- pbapply::pblapply(
       MAXT = x$maxiter,
       BURN = x$burn,
       STEPSIZE = x$stepsize,
-      SCALEVEC = x$scls,
-      PAR1 = 1,
-      PAR2 = x$stepsize,
-      PAR3 = .501,
+      # SCALEVEC = x$scls,
+      # PAR1 = 1,
+      # PAR2 = x$stepsize,
+      # PAR3 = .501,
       NU = 1,
       STEPSIZEFLAG = 0,
       SAMPLING_WINDOW = 100,
@@ -340,11 +336,11 @@ save(est_obj_list, file = paste0(path,'/est.Rda'))
 
 
 #### RECYCLE HYPER ####
-load(paste0('isi/data_files/',settingLab,'/setting_init.Rda'))
-load(paste0('isi/data_files/',settingLab,'/sim_setup.Rda'))
+load(paste0('isi_sims/data_files/',settingLab,'/setting_init.Rda'))
+load(paste0('isi_sims/data_files/',settingLab,'/sim_setup.Rda'))
 
 lab <- 'recycle_hyper'
-path <- paste0('isi/data_files/', settingLab,'/',lab)
+path <- paste0('isi_sims/data_files/', settingLab,'/',lab)
 if(!dir.exists(path)){dir.create(path); cat('[Create setting-method data folder]')}
 cat(lab,':\n')
 
@@ -361,10 +357,10 @@ est_obj_list <- pbapply::pblapply(
       MAXT = x$maxiter,
       BURN = x$burn,
       STEPSIZE = x$stepsize,
-      SCALEVEC = x$scls,
-      PAR1 = 1,
-      PAR2 = x$stepsize,
-      PAR3 = .501,
+      # SCALEVEC = x$scls,
+      # PAR1 = 1,
+      # PAR2 = x$stepsize,
+      # PAR3 = .501,
       NU = 1,
       STEPSIZEFLAG = 0,
       SAMPLING_WINDOW = 100,
@@ -388,41 +384,41 @@ est_obj_list <- pbapply::pblapply(
 save(est_obj_list, file = paste0(path,'/est.Rda'))
 
 #### COLLECT #####
-load(paste0('isi/data_files/',settingLab,'/setting_init.Rda'))
-load(paste0('isi/data_files/',settingLab,'/sim_setup.Rda'))
+load(paste0('isi_sims/data_files/',settingLab,'/setting_init.Rda'))
+load(paste0('isi_sims/data_files/',settingLab,'/sim_setup.Rda'))
 
 true_tib <- tibble(par = 1:length(true_theta), true_val = true_theta)
-load(paste0('isi/data_files/', settingLab, '/ucminf/est.Rda'))
+load(paste0('isi_sims/data_files/', settingLab, '/ucminf/est.Rda'))
 num_est <- sim_settings %>%
   mutate(stepsize = NA, scaling = NA, scls = NA, maxiter = NA, burn = NA, meth = 'ucminf') %>%
   distinct() %>%
   mutate(mod = est_obj_list)
 
-load(paste0('isi/data_files/', settingLab, '/standard/est.Rda'))
+load(paste0('isi_sims/data_files/', settingLab, '/standard/est.Rda'))
 standard_est <- sim_settings %>%
   mutate(meth = 'standard') %>%
   distinct() %>%
   mutate(mod = est_obj_list)
 
-load(paste0('isi/data_files/', settingLab, '/bernoulli/est.Rda'))
+load(paste0('isi_sims/data_files/', settingLab, '/bernoulli/est.Rda'))
 bernoulli_est <- sim_settings %>%
   mutate(meth = 'bernoulli') %>%
   distinct() %>%
   mutate(mod = est_obj_list)
 
-load(paste0('isi/data_files/', settingLab, '/hyper/est.Rda'))
+load(paste0('isi_sims/data_files/', settingLab, '/hyper/est.Rda'))
 hyper_est <- sim_settings %>%
   mutate(meth = 'hyper') %>%
   distinct() %>%
   mutate(mod = est_obj_list)
 
-load(paste0('isi/data_files/', settingLab, '/recycle_standard/est.Rda'))
+load(paste0('isi_sims/data_files/', settingLab, '/recycle_standard/est.Rda'))
 recycle_standard_est <- sim_settings %>%
   mutate(meth = 'recycle_standard') %>%
   distinct() %>%
   mutate(mod = est_obj_list)
 
-load(paste0('isi/data_files/', settingLab, '/recycle_hyper/est.Rda'))
+load(paste0('isi_sims/data_files/', settingLab, '/recycle_hyper/est.Rda'))
 recycle_hyper_est <- sim_settings %>%
   mutate(meth = 'recycle_hyper') %>%
   distinct() %>%
@@ -438,12 +434,12 @@ path_tab <- stoc_est %>%
   mutate(path_theta = map(mod, ~try(get_tidy_path3(.x, 'path_av_theta')))) %>%
   select(-mod)
 
-save(num_est, stoc_est, path_tab, true_tib, file = paste0('isi/data_files/', settingLab, '/est.Rda'))
+save(num_est, stoc_est, path_tab, true_tib, file = paste0('isi_sims/data_files/', settingLab, '/est.Rda'))
 ######## variance ####
 
-load(paste0('isi/data_files/',settingLab,'/setting_init.Rda'))
-load(paste0('isi/data_files/',settingLab,'/sim_setup.Rda'))
-load(paste0('isi/data_files/',settingLab,'/est.Rda'))
+load(paste0('isi_sims/data_files/',settingLab,'/setting_init.Rda'))
+load(paste0('isi_sims/data_files/',settingLab,'/sim_setup.Rda'))
+load(paste0('isi_sims/data_files/',settingLab,'/est.Rda'))
 selected_passes <- seq(.5,npasses,.5)
 ncores <- 1
 
@@ -499,7 +495,7 @@ var_list <- pbapply::pblapply(path_selected %>% purrr::transpose(),
                               cl = ncores)
 
 path_selected$asy_var <- var_list
-save(path_selected, file = paste0('isi/data_files/', settingLab,'/','path_variance.Rda'))
+save(path_selected, file = paste0('isi_sims/data_files/', settingLab,'/','path_variance.Rda'))
 
 
 cat('Variance numeric estimator:\n')
@@ -538,4 +534,4 @@ var_list_num <- pbapply::pblapply(num_est %>% purrr::transpose(),
                                   }), cl = ncores)
 num_est$asy_var <- var_list_num
 
-save(num_est, file = paste0('isi/data_files/', settingLab,'/','num_variance.Rda'))
+save(num_est, file = paste0('isi_sims/data_files/', settingLab,'/','num_variance.Rda'))

@@ -8,9 +8,9 @@ library(tidyverse)
 
 #### choose setting folder ####
 settingLab <- 'I'
-load(paste0('isi/data_files/',settingLab,'/setting_init.Rda'))
-load(paste0('isi/data_files/',settingLab,'/sim_setup.Rda'))
-plots_path <- paste0('isi/data_files/', settingLab, '/plots/')
+load(paste0('isi_sims/data_files/',settingLab,'/setting_init.Rda'))
+load(paste0('isi_sims/data_files/',settingLab,'/sim_setup.Rda'))
+plots_path <- paste0('isi_sims/plots/', settingLab,'/')
 if(!dir.exists(plots_path)){dir.create(plots_path); cat('[Create setting-related data folder]')}
 if(!dir.exists(paste0(plots_path,'gg/'))){dir.create(paste0(plots_path,'gg/')); cat('[Create setting-related data folder]')}
 
@@ -28,7 +28,7 @@ barplot(rep(1, length(colz)), col = colz)
 numcol <- '#0B0405FF'
 
 #### pointwise results ####
-load(paste0('isi/data_files/',settingLab,'/est.Rda'))
+load(paste0('isi_sims/data_files/',settingLab,'/est.Rda'))
 name_par <- function(par){
     if(par > p){'edge coefficients'}
     else{'intercepts'}
@@ -264,8 +264,8 @@ ggsave(plot = gg_clock, filename = paste0(plots_path, 'gg_clock.pdf'), width = 1
 
 
 #### Inference results ####
-load(paste0('isi/data_files/', settingLab,'/','path_variance.Rda'))
-load(paste0('isi/data_files/', settingLab,'/','num_variance.Rda'))
+load(paste0('isi_sims/data_files/', settingLab,'/','path_variance.Rda'))
+load(paste0('isi_sims/data_files/', settingLab,'/','num_variance.Rda'))
 selected_passes <- seq(.5,npasses,.5)
 num_est %>%
     select(stoc_seed, sample_size, meth, asy_var) %>%

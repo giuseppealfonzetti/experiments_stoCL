@@ -41,10 +41,13 @@ check_SCSD_args <- function(ARGS, N, D){
 
     if(is.null(ARGS$MAXT)) out$MAXT <- round(N,0)
     if(is.null(ARGS$BURN)) out$BURN <- 0
-    if(is.null(ARGS$STEPSIZE)) out$STEPSIZE <- 1e-3
+    if(is.null(ARGS$STEPSIZE)) out$STEPSIZE <- 1
     if(is.null(ARGS$NU)) out$NU <- 1
     if(is.null(ARGS$SEED)) out$SEED <- 123
     if(is.null(ARGS$SCALEVEC)) out$SCALEVEC <- rep(1, D)
+    if(is.null(ARGS$PAR1)) out$PAR1 <- 1
+    if(is.null(ARGS$PAR2)) out$PAR2 <- 1
+    if(is.null(ARGS$PAR3)) out$PAR3 <- .501
 
 
     return(out)

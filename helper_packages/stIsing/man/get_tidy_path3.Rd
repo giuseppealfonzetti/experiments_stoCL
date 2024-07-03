@@ -2,26 +2,15 @@
 % Please edit documentation in R/utils.R
 \name{get_tidy_path3}
 \alias{get_tidy_path3}
-\title{#'@export
-get_tidy_path <- function(MOD_OBJ, PATH_LAB){
-iters <- MOD_OBJ$iterations_subset
-path  <- MOD_OBJ$fit[\link{PATH_LAB}]}
+\title{Get parameters trajectories}
 \usage{
 get_tidy_path3(MOD_OBJ, PATH_LAB)
 }
-\description{
-\if{html}{\out{<div class="sourceCode">}}\preformatted{if(PATH_LAB\%in\%c('path_nll'))\{
-    out <- dplyr::tibble(iter = iters) \%>\%
-        dplyr::mutate(
-            path_chosen = c(path,NA)
-        )
-\}else if(PATH_LAB\%in\%c('path_grad'))\{
-    out <- dplyr::tibble(iter = iters) \%>\%
-        dplyr::mutate(
-            path_chosen = split(t(rbind(path, rep(NA, ncol(path)))), rep(1:(nrow(path)+1), each = ncol(path)))
-        )
-}\if{html}{\out{</div>}}
-}
-\details{
+\arguments{
+\item{MOD_OBJ}{object from \link{fit_isingGraph3}}
 
+\item{PATH_LAB}{Label of the path of interest}
+}
+\description{
+Get parameters trajectories
 }

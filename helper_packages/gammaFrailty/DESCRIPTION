@@ -14,6 +14,6 @@ RoxygenNote: 7.2.3
 LinkingTo: Rcpp, RcppEigen, RcppClock, BH
 Imports: Rcpp, RcppEigen, stats, dplyr, purrr, ucminf, mvtnorm
 NeedsCompilation: yes
-Packaged: 2024-07-02 12:16:43 UTC; pho
+Packaged: 2024-07-03 07:48:30 UTC; pho
 Author: XXX XXX [aut, cre] (XXX-XXX-XXX)
 Maintainer: XXX XXX <XXX@XXX.com>

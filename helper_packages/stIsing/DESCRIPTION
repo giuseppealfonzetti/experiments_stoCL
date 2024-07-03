@@ -12,8 +12,8 @@ Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.3
 LinkingTo: Rcpp, RcppEigen, RcppClock
-Imports: Rcpp
+Imports: Rcpp, RcppEigen, RcppClock, dplyr, ucminf, tibble
 NeedsCompilation: yes
-Packaged: 2024-07-02 07:10:37 UTC; pho
+Packaged: 2024-07-03 07:39:16 UTC; pho
 Author: XXX XXX [aut, cre] (XXX-XXX-XXX)
 Maintainer: XXX XXX <XXX@XXX.com>

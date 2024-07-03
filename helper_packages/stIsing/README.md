@@ -105,7 +105,7 @@ fit <- fit_isingGraph3(
 )
 #> 1. Initialising at init vector.
 #> 2. Optimising with ucminf...
-#> 3. Done! (5.92 secs)
+#> 3. Done! (5.97 secs)
 mean((fit$theta-true_theta)^2)
 #> [1] 0.0119769
 mean((theta_init-true_theta)^2)
@@ -122,10 +122,6 @@ cpp_ctrl <- list(
       MAXT = n,
       BURN = .25,
       STEPSIZE = 1,
-      SCALEVEC = rep(1,d),
-      PAR1 = 1,
-      PAR2 = 1,
-      PAR3 = .501,
       NU = 1,
       STEPSIZEFLAG = 0,
       SAMPLING_WINDOW = 500,
@@ -158,9 +154,9 @@ stFit <- fit_isingGraph3(
 #> 1. Initialising at init vector.
 #> 2. Optimising with recycle_hyper...
 #> 3. Storing results
-#> 4. Done! (0.13 secs)
+#> 4. Done! (0.14 secs)
 tictoc::toc()
-#> 0.476 sec elapsed
+#> 0.485 sec elapsed
 
 mean((stFit$theta-true_theta)^2)
 #> [1] 0.01282374

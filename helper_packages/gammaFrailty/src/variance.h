@@ -124,7 +124,7 @@ Eigen::MatrixXd sampleH(
 //' @param DATA matrix with `n` rows and `p` columns
 //' @param X External covariates matrix with `n` rows
 //' @param STRUCT Structure of the correlation matrix. Allowed values are "AR" or "COMPOUND".
-//' @param NU Nomber of pairs per iteration on average
+//' @param NU Number of pairs per iteration on average
 //' @param METHOD Allowed choices are "ucminf", "standard", "bernoulli", "hyper",
 //' "recycle_standard", "recycle_bernoulli", "recycle_hyper"
 //' @param RANGE Number of iterations after the burn-in.

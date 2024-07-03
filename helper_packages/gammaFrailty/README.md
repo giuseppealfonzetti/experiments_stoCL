@@ -95,7 +95,7 @@ fit <- fit_gammaFrailty2(
 )
 #> 1. Initialising at init vector.
 #> 2. Optimising with ucminf...
-#> 3. Done! (12.27 secs)
+#> 3. Done! (12.2 secs)
 
 mean((repartopar(fit$theta)-theta)^2)
 #> [1] 0.000307326
@@ -111,9 +111,6 @@ cpp_ctrl <- list(
             MAXT = n,
             BURN = .25,
             STEPSIZE = 1,
-            SCALEVEC = rep(1,d),
-            PAR2 = 1,
-            PAR3 = .501,
             NU = 1,
             STEPSIZEFLAG = 0,
             SAMPLING_WINDOW = 500,

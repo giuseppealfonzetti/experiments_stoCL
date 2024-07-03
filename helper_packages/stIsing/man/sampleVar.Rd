@@ -4,29 +4,16 @@
 \alias{sampleVar}
 \title{Compute sample covariance matrix}
 \usage{
-sampleVar(
-  THETA,
-  DATA,
-  X,
-  STRUCT,
-  NU,
-  METHOD,
-  RANGE,
-  TOTFLAG,
-  PRINTFLAG,
-  PAIRS_RANGE = 100L
-)
+sampleVar(THETA, DATA, CONSTRAINTS, NU, METHOD, RANGE, TOTFLAG, PRINTFLAG)
 }
 \arguments{
 \item{THETA}{Parameter vector}
 
-\item{DATA}{matrix with \code{n} rows and \code{p} columns}
+\item{DATA}{Matrix with \code{n} rows and \code{p} columns}
 
-\item{X}{External covariates matrix with \code{n} rows}
+\item{CONSTRAINTS}{Vector of booleans: TRUE denotes free-to-estimate parameters}
 
-\item{STRUCT}{Structure of the correlation matrix. Allowed values are "AR" or "COMPOUND".}
-
-\item{NU}{Number of pairs per iteration on average}
+\item{NU}{Number of pairs per iteration on average.}
 
 \item{METHOD}{Allowed choices are "ucminf", "standard", "bernoulli", "hyper",
 "recycle_standard", "recycle_bernoulli", "recycle_hyper"}
@@ -36,8 +23,6 @@ sampleVar(
 \item{TOTFLAG}{Compute total variance}
 
 \item{PRINTFLAG}{Verbose output}
-
-\item{PAIRS_RANGE}{Maximum lag between pair components}
 }
 \description{
 Compute sample covariance matrix

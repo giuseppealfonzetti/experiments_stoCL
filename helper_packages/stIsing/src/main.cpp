@@ -11,7 +11,6 @@
 
 // [[Rcpp::depends(RcppEigen, RcppClock)]]
 
-//' @export
 // [[Rcpp::export]]
 Rcpp::List ncl(
         Eigen::MatrixXd &DATA,
@@ -50,7 +49,6 @@ Rcpp::List ncl(
 
 
 
-//' @export
 // [[Rcpp::export]]
 Rcpp::List isingGraph3(
         const Eigen::MatrixXd &DATA,
@@ -68,7 +66,7 @@ Rcpp::List isingGraph3(
         const bool HOLDOUTFLAG = false,
         const double PAR1 = 1,
         const double PAR2 = 1,
-        const double PAR3 = .75,
+        const double PAR3 = .501,
         const unsigned int SAMPLING_WINDOW = 1,
         const unsigned int EACH = 1,
         const unsigned int EACHCLOCK = 100,

@@ -13,7 +13,7 @@ randomized_ncl <- function(theta, data, X, printFLAG = FALSE, PROB = 1, PAIRS_RA
     .Call(`_gammaFrailty_randomized_ncl`, theta, data, X, printFLAG, PROB, PAIRS_RANGE, STRUCT)
 }
 
-gammaFrailty2 <- function(THETA_INIT, DATA, X, STRUCT, MAXT, BURN, STEPSIZE, SCALEVEC, NU, METHODFLAG = 0L, VERBOSEFLAG = FALSE, PAR1 = 1, PAR2 = 1, PAR3 = .75, STEPSIZEFLAG = 0L, SEED = 123L, SAMPLING_WINDOW = 1L, EACHCLOCK = 500L) {
+gammaFrailty2 <- function(THETA_INIT, DATA, X, STRUCT, MAXT, BURN, STEPSIZE, SCALEVEC, NU, METHODFLAG = 0L, VERBOSEFLAG = FALSE, PAR1 = 1, PAR2 = 1, PAR3 = .501, STEPSIZEFLAG = 0L, SEED = 123L, SAMPLING_WINDOW = 1L, EACHCLOCK = 500L) {
     .Call(`_gammaFrailty_gammaFrailty2`, THETA_INIT, DATA, X, STRUCT, MAXT, BURN, STEPSIZE, SCALEVEC, NU, METHODFLAG, VERBOSEFLAG, PAR1, PAR2, PAR3, STEPSIZEFLAG, SEED, SAMPLING_WINDOW, EACHCLOCK)
 }
 
@@ -67,7 +67,7 @@ sampleH <- function(THETA, DATA, X, STRUCT, PRINTFLAG = FALSE, INVERTFLAG = FALS
 #' @param DATA matrix with `n` rows and `p` columns
 #' @param X External covariates matrix with `n` rows
 #' @param STRUCT Structure of the correlation matrix. Allowed values are "AR" or "COMPOUND".
-#' @param NU Nomber of pairs per iteration on average
+#' @param NU Number of pairs per iteration on average
 #' @param METHOD Allowed choices are "ucminf", "standard", "bernoulli", "hyper",
 #' "recycle_standard", "recycle_bernoulli", "recycle_hyper"
 #' @param RANGE Number of iterations after the burn-in.

@@ -3,7 +3,6 @@
 
 #include "binarynodeClass.h"
 
-//' @export
 // [[Rcpp::export]]
 Eigen::MatrixXd sampleH(
         Eigen::VectorXd THETA,
@@ -46,7 +45,6 @@ Eigen::MatrixXd sampleH(
 
 }
 
-//' @export
 // [[Rcpp::export]]
 Eigen::MatrixXd sampleJ(
         Eigen::VectorXd THETA,
@@ -85,7 +83,17 @@ Eigen::MatrixXd sampleJ(
 
 }
 
-
+//' Compute sample covariance matrix
+//'
+//' @param THETA Parameter vector
+//' @param DATA Matrix with `n` rows and `p` columns
+//' @param CONSTRAINTS Vector of booleans: TRUE denotes free-to-estimate parameters
+//' @param NU Number of pairs per iteration on average.
+//' @param METHOD Allowed choices are "ucminf", "standard", "bernoulli", "hyper",
+//' "recycle_standard", "recycle_bernoulli", "recycle_hyper"
+//' @param RANGE Number of iterations after the burn-in.
+//' @param TOTFLAG Compute total variance
+//' @param PRINTFLAG Verbose output
 //' @export
 // [[Rcpp::export]]
 Rcpp::List sampleVar(

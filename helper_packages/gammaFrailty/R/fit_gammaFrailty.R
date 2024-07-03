@@ -3,36 +3,36 @@ utils::globalVariables(c("clock"))
 #'
 #' @param DATA_LIST List containing:
 #' \itemize{
-#'  \item{`DATA`}{Data matrix with `n` rows and `p` columns}
-#'  \item{`X`}{External covariates matrix with `n` rows}
+#'  \item{`DATA`}{ Data matrix with `n` rows and `p` columns}
+#'  \item{`X`}{ External covariates matrix with `n` rows}
 #' }
 #' @param METHOD Allowed choices are "ucminf", "standard", "bernoulli", "hyper",
 #' "recycle_standard", "recycle_bernoulli", "recycle_hyper" and "randomized".
 #' @param CPP_CONTROL List of arguments to be passed to the stochastic optimizer:
 #' \itemize{
-#'  \item{`MAXT`}{Number of iterations.}
-#'  \item{`BURN`}{Scalar between 0 and 1 denoting the share of `n` to be used as burn-in iterations.}
-#'  \item{`STEPSIZE`}{Initial stepsize parameter.}
-#'  \item{`NU`}{Nomber of pairs per iteration on average.}
-#'  \item{`PAR1`}{Hyperparameter for stepsize scheduling by Xu (2011): Scaling.}
-#'  \item{`PAR2`}{Hyperparameter for stepsize scheduling by Xu (2011): Smallest Hessian eigenvalue.}
-#'  \item{`PAR3`}{Hyperparameter for stepsize scheduling by Xu (2011): Decay rate}
-#'  \item{`STEPSIZEFLAG`}{Choose stepsize scheduling: Set 0 for Polyak and Juditsky (1992), 1 for Xu (2011).}
-#'  \item{`SAMPLING_WINDOW`}{How many iterations to wait before resampling}
-#'  \item{`EACHCLOCK`}{How often (in terms of iterations) to measure single iteration computational times (using \code{RcppClock})}
-#'  \item{`SEED`}{Random seed for reproducibility.}
+#'  \item{`MAXT`}{ Number of iterations.}
+#'  \item{`BURN`}{ Scalar between 0 and 1 denoting the share of `n` to be used as burn-in iterations.}
+#'  \item{`STEPSIZE`}{ Initial stepsize parameter.}
+#'  \item{`NU`}{ Number of pairs per iteration on average.}
+#'  \item{`PAR1`}{ Hyperparameter for stepsize scheduling by Xu (2011): Scaling.}
+#'  \item{`PAR2`}{ Hyperparameter for stepsize scheduling by Xu (2011): Smallest Hessian eigenvalue.}
+#'  \item{`PAR3`}{ Hyperparameter for stepsize scheduling by Xu (2011): Decay rate}
+#'  \item{`STEPSIZEFLAG`}{ Choose stepsize scheduling: Set 0 for Polyak and Juditsky (1992), 1 for Xu (2011).}
+#'  \item{`SAMPLING_WINDOW`}{ How many iterations to wait before resampling}
+#'  \item{`EACHCLOCK`}{ How often (in terms of iterations) to measure single iteration computational times (using \code{RcppClock})}
+#'  \item{`SEED`}{ Random seed for reproducibility.}
 #' }
 #' @param UCMINF_CONTROL List of arguments to be passed to \link[ucminf]{ucminf}:
 #' \itemize{
-#'  \item{"ctrl"}{Passed to `ctrl` argument in \link[ucminf]{ucminf}}
-#'  \item{"hessian"}{Passed to `hessian` argument in \link[ucminf]{ucminf}}
+#'  \item{"ctrl"}{ Passed to `ctrl` argument in \link[ucminf]{ucminf}}
+#'  \item{"hessian"}{ Passed to `hessian` argument in \link[ucminf]{ucminf}}
 #' }
 #' @param PAIRS_RANGE Maximum lag between pair components.
 #' @param STRUCT Structure of the correlation matrix. Allowed values are "AR" or "COMPOUND".
 #' @param INIT Initialization vector.
 #' @param ITERATIONS_SUBSET Vector containing the indexes of the iterations to be returned to the R session.
 #' @param VERBOSEFLAG Verbose output.
-#'@export
+#' @export
 fit_gammaFrailty2 <- function(
         DATA_LIST = list('DATA', 'X'),
         METHOD,

@@ -1,19 +1,3 @@
-#' #'@export
-#' check_SCSD_args <- function(ARGS, N, D){
-#'
-#'     out <- ARGS
-#'
-#'     if(is.null(ARGS$MAXT)) out$MAXT <- round(N,0)
-#'     if(is.null(ARGS$BURN)) out$BURN <- 0
-#'     if(is.null(ARGS$STEPSIZE)) out$STEPSIZE <- 1
-#'     if(is.null(ARGS$NU)) out$NU <- 1
-#'     if(is.null(ARGS$SEED)) out$SEED <- 123
-#'     if(is.null(ARGS$SCALEVEC)) out$SCALEVEC <- rep(1, D)
-#'
-#'     return(out)
-#' }
-
-#'@export
 check_stoc_args <- function(ARGS, N, D){
 
     out <- ARGS
@@ -26,70 +10,37 @@ check_stoc_args <- function(ARGS, N, D){
     if(is.null(ARGS$SCALEVEC)) out$SCALEVEC <- rep(1, D)
     if(is.null(ARGS$EACH)) out$EACH <- 1
     if(is.null(ARGS$HOLDOUTFLAG)) out$HOLDOUTFLAG <- F
-
+    if(is.null(ARGS$PAR1)) out$PAR1 <- 1
+    if(is.null(ARGS$PAR2)) out$PAR2 <- 1
+    if(is.null(ARGS$PAR3)) out$PAR3 <- .501
     return(out)
 }
 
-#'@export
-check_GD_args <- function(ARGS, N){
-
-    out <- list('MAXT' = ARGS$MAXT, 'STEPSIZE' = ARGS$STEPSIZE)
-
-    if(is.null(ARGS$MAXT)) out$MAXT <- round(N^.75,0)
-    if(is.null(ARGS$STEPSIZE)) out$STEPSIZE <- 1e-2
-
-    return(out)
-}
-
-#' #'@export
-#' get_tidy_path <- function(MOD_OBJ, PATH_LAB){
-#'     iters <- MOD_OBJ$iterations_subset
-#'     path  <- MOD_OBJ$fit[[PATH_LAB]]
+#' Get parameters trajectories
 #'
-#'     if(PATH_LAB%in%c('path_nll')){
-#'         out <- dplyr::tibble(iter = iters) %>%
-#'             dplyr::mutate(
-#'                 path_chosen = c(path,NA)
-#'             )
-#'     }else if(PATH_LAB%in%c('path_grad')){
-#'         out <- dplyr::tibble(iter = iters) %>%
-#'             dplyr::mutate(
-#'                 path_chosen = split(t(rbind(path, rep(NA, ncol(path)))), rep(1:(nrow(path)+1), each = ncol(path)))
-#'             )
+#' @param MOD_OBJ object from \link{fit_isingGraph3}
+#' @param PATH_LAB Label of the path of interest
 #'
-#'     }else{
-#'         out <- dplyr::tibble(iter = iters) %>%
-#'             dplyr::mutate(
-#'                 path_chosen = split(t(path), rep(1:nrow(path), each = ncol(path)))
-#'             )
-#'     }
-#'
-#'
-#'     colnames(out) <- c('iter', PATH_LAB)
-#'
-#'     return(out)
-#' }
-
-#'@export
+#' @export
 get_tidy_path3 <- function(MOD_OBJ, PATH_LAB){
     iters <- MOD_OBJ$fit$iter_idx
     path  <- Reduce(rbind, MOD_OBJ$fit[[PATH_LAB]])
 
-    if(require('dplyr')){
+    if(requireNamespace(c('dplyr'), quietly = TRUE)){
         if(PATH_LAB%in%c('path_nll')){
-            out <- dplyr::tibble(iter = iters) %>%
+            out <- tibble::tibble(iter = iters) |>
                 dplyr::mutate(
                     path_chosen = c(path,NA)
                 )
         }else if(PATH_LAB%in%c('path_grad')){
             iters <- iters[-1]
-            out <- dplyr::tibble(iter = iters) %>%
+            out <- tibble::tibble(iter = iters) |>
                 dplyr::mutate(
                     path_chosen = split(t(path), rep(1:nrow(path), each = ncol(path)))
                 )
 
         }else{
-            out <- dplyr::tibble(iter = iters) %>%
+            out <- tibble::tibble(iter = iters) |>
                 dplyr::mutate(
                     path_chosen = split(t(path), rep(1:nrow(path), each = ncol(path)))
                 )
@@ -99,11 +50,16 @@ get_tidy_path3 <- function(MOD_OBJ, PATH_LAB){
         colnames(out) <- c('iter', PATH_LAB)
 
         return(out)
-    }else{break}
+    }else{return(NULL)}
 
 }
 
-#'@export
+#' From vector to matrix
+#'
+#' @param par Parameter vector
+#' @param p Number of nodes
+#'
+#' @export
 ising_from_theta_to_emat <- function(par, p){
     emat <- matrix(0, p, p)
     counter <- p+1
@@ -117,7 +73,11 @@ ising_from_theta_to_emat <- function(par, p){
     return(emat)
 }
 
-#'@export
+#' From matrix to vector
+#' @param graph Graph matrix
+#' @param intercepts Nodes intercepts
+#'
+#' @export
 ising_from_graph_to_theta <- function(graph, intercepts){
     p <- length(intercepts)
     par <- intercepts

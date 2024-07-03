@@ -200,7 +200,7 @@ Rcpp::List gammaFrailty2(
         const bool VERBOSEFLAG = false,
         const double PAR1 = 1,
         const double PAR2 = 1,
-        const double PAR3 = .75,
+        const double PAR3 = .501,
         const int STEPSIZEFLAG = 0,
         const unsigned int SEED = 123,
         const unsigned int SAMPLING_WINDOW = 1,

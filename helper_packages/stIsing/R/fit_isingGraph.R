@@ -1,4 +1,36 @@
-#'@export
+utils::globalVariables(c("clock"))
+#' Ising model estimation
+#'
+#' @param DATA_LIST List containing:
+#' \itemize{
+#'  \item{`DATA`}{ Data matrix with `n` rows and `p` columns}
+#'  \item{`CONSTRAINTS`}{ Vector of booleans: TRUE denotes free-to-estimate parameters }
+#' }
+#' @param METHOD Allowed choices are "ucminf", "standard", "bernoulli", "hyper",
+#' "recycle_standard", "recycle_bernoulli", "recycle_hyper".
+#' @param CPP_CONTROL List of arguments to be passed to the stochastic optimizer:
+#' \itemize{
+#'  \item{`MAXT`}{ Number of iterations.}
+#'  \item{`BURN`}{ Scalar between 0 and 1 denoting the share of `n` to be used as burn-in iterations.}
+#'  \item{`STEPSIZE`}{ Initial stepsize parameter.}
+#'  \item{`NU`}{ Number of pairs per iteration on average.}
+#'  \item{`PAR1`}{ Hyperparameter for stepsize scheduling by Xu (2011): Scaling.}
+#'  \item{`PAR2`}{ Hyperparameter for stepsize scheduling by Xu (2011): Smallest Hessian eigenvalue.}
+#'  \item{`PAR3`}{ Hyperparameter for stepsize scheduling by Xu (2011): Decay rate}
+#'  \item{`STEPSIZEFLAG`}{ Choose stepsize scheduling: Set 0 for Polyak and Juditsky (1992), 1 for Xu (2011).}
+#'  \item{`SAMPLING_WINDOW`}{ How many iterations to wait before resampling}
+#'  \item{`EACHCLOCK`}{ How often (in terms of iterations) to measure single iteration computational times (using \code{RcppClock})}
+#'  \item{`SEED`}{ Random seed for reproducibility.}
+#' }
+#' @param UCMINF_CONTROL List of arguments to be passed to \link[ucminf]{ucminf}:
+#' \itemize{
+#'  \item{"ctrl"}{ Passed to `ctrl` argument in \link[ucminf]{ucminf}}
+#'  \item{"hessian"}{ Passed to `hessian` argument in \link[ucminf]{ucminf}}
+#' }
+#' @param INIT Initialization vector.
+#' @param VERBOSEFLAG Verbose output.
+#'
+#' @export
 fit_isingGraph3 <- function(
         DATA_LIST = list('DATA', 'CONSTRAINTS', 'HOLDOUT'),
         METHOD,
@@ -12,8 +44,7 @@ fit_isingGraph3 <- function(
         ),
         UCMINF_CONTROL = list('ctrl' = list(), 'hessian' = 0 ),
         INIT = NULL,
-        VERBOSEFLAG = 0,
-        RED_TRAJ = FALSE
+        VERBOSEFLAG = 0
 ){
 
     out <- list()
@@ -21,6 +52,7 @@ fit_isingGraph3 <- function(
 
     p <- ncol(DATA_LIST$DATA)
     d <- p + p*(p-1)/2
+    n <- nrow(DATA_LIST$DATA)
 
     # Check Initialisation
     if(is.vector(INIT)){
@@ -88,24 +120,13 @@ fit_isingGraph3 <- function(
         # Check stochastic control parameters
         cpp_ctrl <- check_stoc_args(CPP_CONTROL, N = n, D = d)
 
-        # # Check iterations selected
-        # if(!is.null(ITERATIONS_SUBSET)){
-        #     out$iterations_subset <- c(0, ITERATIONS_SUBSET[ITERATIONS_SUBSET < cpp_ctrl$MAXT], cpp_ctrl$MAXT)
-        # }else{
-        #     out$iterations_subset <- 0:cpp_ctrl$MAXT
-        # }
-
-        # Guarantee reproducibility stochastic optimisation with bernoulli sampling
-        # For the other schemes the seed is passed directly to the cpp function
-        set.seed(cpp_ctrl$SEED)
+          set.seed(cpp_ctrl$SEED)
 
         # Collect and rearrange arguments to pass to cpp function
         args <- append(list( 'THETA_INIT' = out$theta_init), c( DATA_LIST, cpp_ctrl) )
 
-        #args$SEED <- NULL
 
         if(METHOD == 'standard'){args$METHODFLAG <- 1} else if(METHOD == 'bernoulli'){args$METHODFLAG <- 2}else if(METHOD == 'hyper'){args$METHODFLAG <- 3}else if(METHOD == 'recycle_standard'){args$METHODFLAG <- 4}else if(METHOD == 'recycle_hyper'){args$METHODFLAG <- 5}
-        #args$METHODFLAG <- dplyr::if_else(METHOD == 'OSGD', 1, 2)
 
         fit <- do.call(isingGraph3, args)
 
@@ -113,13 +134,7 @@ fit_isingGraph3 <- function(
 
         out$theta <- fit$path_av_theta[[length(fit$path_av_theta)]]
 
-        if(RED_TRAJ){
-            fit$path_theta    <- Reduce(rbind, fit$path_theta)
-            fit$path_av_theta <- Reduce(rbind, fit$path_av_theta)
-            fit$path_grad     <- Reduce(rbind, fit$path_grad)
-        }
 
-        #fit$path_ncl      <- fit$path_ncl[out$iterations_subset]
 
 
         fit$methodflag <- NULL
@@ -128,7 +143,7 @@ fit_isingGraph3 <- function(
 
         out$control <- cpp_ctrl
         out$fit <- fit
-        if('RcppClock'%in% (.packages())) out$clock <- summary(clock, units = 's')
+        if(requireNamespace('RcppClock', quietly = TRUE)) out$clock <- summary(clock, units = 's')
 
         end_time <- Sys.time()
         out$time <- as.numeric(difftime(end_time, start_time, units = 'secs')[1])

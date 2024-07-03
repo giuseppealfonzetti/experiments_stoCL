@@ -11,6 +11,16 @@
 
 // [[Rcpp::depends(RcppEigen, RcppClock)]]
 
+//' Negative composite log-likelihood
+//'
+//' Compute the negative composite log-likelihood of an Ising graph and its gradient
+//'
+//' @param DATA Data matrix with `n` rows and `p` columns
+//' @param THETA Parameter vector.
+//' @param CONSTRAINTS Vector of booleans: TRUE denotes free-to-estimate parameters
+//' @param VERBOSEFLAG Verbose output.
+//'
+//' @export
 // [[Rcpp::export]]
 Rcpp::List ncl(
         Eigen::MatrixXd &DATA,

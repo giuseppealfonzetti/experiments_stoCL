@@ -3,6 +3,15 @@
 
 #include "binarynodeClass.h"
 
+//' Compute sample covariance matrix
+//'
+//' @param THETA Parameter vector
+//' @param DATA Matrix with `n` rows and `p` columns
+//' @param CONSTRAINTS Vector of booleans: TRUE denotes free-to-estimate parameters
+//' @param INVERTFLAG TRUE for inverse of the sample Hessian
+//' @param VERBOSEFLAG Verbose output
+//'
+//' @export
 // [[Rcpp::export]]
 Eigen::MatrixXd sampleH(
         Eigen::VectorXd THETA,
@@ -45,6 +54,14 @@ Eigen::MatrixXd sampleH(
 
 }
 
+//' Compute sample variability matrix
+//'
+//' @param THETA Parameter vector
+//' @param DATA Matrix with `n` rows and `p` columns
+//' @param CONSTRAINTS Vector of booleans: TRUE denotes free-to-estimate parameters
+//' @param VERBOSEFLAG Verbose output
+//'
+//' @export
 // [[Rcpp::export]]
 Eigen::MatrixXd sampleJ(
         Eigen::VectorXd THETA,
@@ -94,6 +111,7 @@ Eigen::MatrixXd sampleJ(
 //' @param RANGE Number of iterations after the burn-in.
 //' @param TOTFLAG Compute total variance
 //' @param PRINTFLAG Verbose output
+//'
 //' @export
 // [[Rcpp::export]]
 Rcpp::List sampleVar(
